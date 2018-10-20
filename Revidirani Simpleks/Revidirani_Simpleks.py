@@ -17,6 +17,7 @@ class Sistem:
         self.x = np.array([])
 
 
+# Funkcija za unos
 def unesiUlaz(s):
 
     funkcija = input("Unesite problem ( u obliku max ili min) i koeficijente funkcije:").split(" ")
@@ -41,10 +42,9 @@ def unesiUlaz(s):
 
         linija = input("Unesite sve koeficijente nejednacine kao i znak:").split(" ")
         s.niz_znakova = np.append(s.niz_znakova, linija[-2])
-
         koefs_nejednacine = list(map(float, linija[:-2] + linija[-1:]))
-        print("koefs nejednacine i duzina:", koefs_nejednacine, len(koefs_nejednacine))
         duzina = len(koefs_nejednacine)
+
         for j in range(duzina):
             if j == duzina-1:
                 s.matricaB[i][0] = koefs_nejednacine[j]
@@ -52,14 +52,14 @@ def unesiUlaz(s):
                 s.matricaA[i][j] = koefs_nejednacine[j]
 
 
+# Funkcija za svodjenje na kanonski oblik
 def kanonskiOblik(s):
 
     j = s.br_kolona
-    print("nova matrica A, j:", s.matricaA, j)
 
     # Prebacujemo u problem nalazenja minimuma
     if s.problem == "max":
-        #s.problem = "min"
+        s.problem = "min"
         s.koefs_problema *= (-1)
 
     for i in range(s.br_kolona):
@@ -83,17 +83,16 @@ def kanonskiOblik(s):
                 s.matricaB[i][0] *= -1
 
             s.niz_znakova[i] = "="
-            s.br_kolona += 1  # izmenjen broj kolona!!
+            s.br_kolona += 1         # Izmenjen broj kolona
             s.P = np.append(s.P, j)
             j += 1
 
     s.Q = np.array(list(map(int, s.Q)))
     s.P = np.array(list(map(int, s.P)))
-    print("Q, P na pocetku:", s.Q, s.P)
-
-    s.koefs_problema = np.append(s.koefs_problema, np.zeros((1, s.br_vrsta)))
+    s.koefs_problema = np.append(s.koefs_problema, np.zeros((1, len(s.P))))
 
 
+# Pomocna funkcija za proveru uslova
 def proveriUslov(koefs):
 
     for i in range(len(koefs)):
@@ -102,7 +101,7 @@ def proveriUslov(koefs):
 
     return True
 
-
+# Pomocna funkcija za pronalazenje indeksa
 def pronadjiIndeks(koefs, s):
 
     for i in range(len(koefs)):
@@ -115,65 +114,51 @@ def main():
     s = Sistem()
 
     unesiUlaz(s)
-    print(s.br_vrsta,
-          s.br_kolona,
-          s.rez_funkcije,
-          s.problem,
-          s.koefs_problema,
-          s.niz_znakova,
-          s.matricaA,
-          s.matricaB
-          )
-
     kanonskiOblik(s)
-    print(s.br_vrsta,
+    print("\n", s.br_vrsta,
           s.br_kolona,
           s.rez_funkcije,
           s.problem,
           s.koefs_problema,
           s.niz_znakova,
-          s.matricaA,
-          s.matricaB,
-          s.P,
-          s.Q
+          "\n", s.matricaA,
+          "\n", s.matricaB,
+          "\n Q, P na pocetku:", s.Q, s.P
           )
 
-    print(type(s.P))
-
-    # if s.problem == "max":
-    #     s.x = np.array(list(map(int, np.append(np.zeros((1, s.br_vrsta+1)), s.matricaB))))  # obrisano s.br_vrsta +1
-    # else:
     s.x = np.array(list(map(int, np.append(np.zeros((1, s.br_kolona - len(s.P))), s.matricaB))))
-    print("s.x:", s.x)
+    print("Pocetno resenje:", s.x)
 
-    tmp = 0
-    while tmp < 100:
+    iteracija = 1
+    while iteracija < 100:
 
+        print("Iteracija :", iteracija)
         matB = s.matricaA[:, s.P]
+        matN = s.matricaA[:, s.Q]
         koefsB_u_f = s.koefs_problema[s.P]
         koefsN_u_f = s.koefs_problema[s.Q]
-        matN = s.matricaA[:, s.Q]
-        print("matB, rezB, matN", matB, s.koefs_problema[s.P], matN)
+        print("matB, matN: \n", matB, "\n", matN)
 
         u_rez = np.linalg.solve(matB.transpose(), koefsB_u_f)
-        print(u_rez)
+        print("Resenje sistema za u:\n", u_rez)
 
         CN_prim = koefsN_u_f - np.dot(u_rez, matN)
-        print("novi koefs", CN_prim, type(CN_prim))
+        print("Novi koeficijenti:\n", CN_prim)
 
+        # Ako su svi koeficijenti pozitivni, nasli smo optimalno resenje
         if proveriUslov(CN_prim):
-            print("KRAJ")
-            print("x opt:", s.x)
-            print("Konacno f", np.sum(s.koefs_problema * s.x))
+            print("\nx optimalno:", s.x)
+            print("Konacno f:", np.sum(s.koefs_problema * s.x))
             exit()
 
         j = pronadjiIndeks(CN_prim, s)
         print("j je:", j)
 
-        print(matB, s.matricaA[:, [j]])
+        #print(matB, "\n", s.matricaA[:, [j]])
         y_rez = np.linalg.solve(matB, s.matricaA[:, [j]])
-        print("y_rez:", y_rez)
+        print("Resenje sistema za y:\n", y_rez)
 
+        # Provera ako je problem neogranicen
         br_neg = 0
         for i in range(len(y_rez)):
             if y_rez[i] <= 0:
@@ -193,35 +178,36 @@ def main():
 
                 if y_rez[pom] > 0:
                     vrednosti = np.append(vrednosti, s.x[i] / y_rez[pom])
-                    print("vrednosti, s.x[i], y_rez[pom]", vrednosti, s.x[i], y_rez[pom])
 
                 pom += 1
 
             t_kapa = vrednosti.min()
-            print("t_kapa:", t_kapa)
+            print("t kapa:", t_kapa)
 
-            x_pom = np.zeros(len(s.x))
+            x_novo = np.zeros(len(s.x))
             pom = 0
-            print("x pom i s x:", x_pom, s.x)
+
             for i in range(len(s.x)):
                 if i == j:
-                    x_pom[i] = t_kapa
+                    x_novo[i] = t_kapa
+
                 elif i in s.P:
-                    print("usao:", i, pom)
-                    x_pom[i] = s.x[i] - t_kapa*y_rez[pom]
+
+                    x_novo[i] = s.x[i] - t_kapa*y_rez[pom]
                     pom += 1
+
                 elif i in s.Q:
-                    x_pom[i] = 0
+                    x_novo[i] = 0
 
-            print("x pom:", x_pom)
-            s.x = x_pom
+            print("x novo:", x_novo)
+            s.x = x_novo
 
-            l = 42  #paziii
+            l = 42
             for i in s.P:
                 if s.x[i] == 0:
                     l = i
 
-            print("l", l)
+            print("l je:", l)
 
             indeksl = 42
             indeksj = 42
@@ -237,15 +223,15 @@ def main():
                 print("Greska, nije pronadjen neki od indeksa za j, l")
                 exit()
 
+            # Pravimo novo P, Q
             staroP = s.P
-
             s.P = np.delete(s.P, indeksl)
             s.P = np.sort(np.append(s.P, s.Q[indeksj]))
             s.Q = np.delete(s.Q, indeksj)
             s.Q = np.sort(np.append(s.Q, staroP[indeksl]))
-            print("novo P, Q", s.P, s.Q)
+            print("Novo P, Q", s.P, s.Q)
 
-            tmp += 1
+            iteracija += 1
 
 
 if __name__ == '__main__':
