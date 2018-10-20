@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0644179e-32f7-40b9-ae97-93a0afb147ed" name="Default Changelist" comment="" />
+    <list default="true" id="0644179e-32f7-40b9-ae97-93a0afb147ed" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Furije_Mockin_metod.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Revidirani_Simpleks.py" beforeDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,23 +21,23 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="2" />
+          <entry key="py" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="2" />
+          <entry key="Python" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="1152" />
-          <entry key="py" value="5899" />
+          <entry key="Python Console" value="1255" />
+          <entry key="py" value="6202" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="7051" />
+          <entry key="Python" value="7457" />
         </counts>
       </usages-collector>
     </session>
@@ -42,24 +45,10 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Revidirani_Simpleks.py">
+        <entry file="file://$PROJECT_DIR$/Revidirani Simpleks/Revidirani_Simpleks.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="84" column="31" lean-forward="true" selection-start-line="84" selection-start-column="31" selection-end-line="84" selection-end-column="31" />
-              <folding>
-                <marker date="1539958740650" expanded="true" signature="34:443" ph="..." />
-                <marker date="1539958740650" expanded="true" signature="2958:3045" ph="..." />
-                <marker date="1539958740650" expanded="true" signature="6923:6924" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Furije_Mockin_metod.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
-              <caret line="144" column="26" selection-start-line="144" selection-start-column="26" selection-end-line="144" selection-end-column="26" />
+            <state relative-caret-position="475">
+              <caret line="43" lean-forward="true" selection-start-line="43" selection-end-line="43" />
             </state>
           </provider>
         </entry>
@@ -81,6 +70,9 @@
       <find>matB</find>
       <find>s.x</find>
       <find>s.problem</find>
+      <find>raw</find>
+      <find>Ne p</find>
+      <find>nema res</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -90,6 +82,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Revidirani_Simpleks.py" />
+        <option value="$PROJECT_DIR$/Furije Mockin metod/Furije_Mockin_metod.py" />
+        <option value="$PROJECT_DIR$/Revidirani Simpleks/Revidirani_Simpleks.py" />
       </list>
     </option>
   </component>
@@ -114,6 +108,16 @@
             <path>
               <item name="Diskretne-strukture-3-algoritmi" type="b2602c69:ProjectViewProjectNode" />
               <item name="Diskretne-strukture-3-algoritmi" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Diskretne-strukture-3-algoritmi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Diskretne-strukture-3-algoritmi" type="462c0819:PsiDirectoryNode" />
+              <item name="Furije Mockin metod" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Diskretne-strukture-3-algoritmi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Diskretne-strukture-3-algoritmi" type="462c0819:PsiDirectoryNode" />
+              <item name="Revidirani Simpleks" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -187,7 +191,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="36" width="1920" height="1044" extended-state="7" />
+    <frame x="0" y="36" width="1920" height="1044" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
@@ -195,11 +199,11 @@
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" weight="0.32896176" />
-      <window_info anchor="bottom" id="Terminal" />
+      <window_info active="true" anchor="bottom" id="Terminal" visible="true" weight="0.32896176" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32896176" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32896176" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32896176" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -222,13 +226,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Revidirani_Simpleks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="84" column="31" lean-forward="true" selection-start-line="84" selection-start-column="31" selection-end-line="84" selection-end-column="31" />
-          <folding>
-            <marker date="1539958740650" expanded="true" signature="34:443" ph="..." />
-            <marker date="1539958740650" expanded="true" signature="2958:3045" ph="..." />
-            <marker date="1539958740650" expanded="true" signature="6923:6924" ph="..." />
-          </folding>
+        <state relative-caret-position="339">
+          <caret line="152" column="42" lean-forward="true" selection-start-line="152" selection-start-column="42" selection-end-line="152" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Furije Mockin metod/Furije_Mockin_metod.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1132">
+          <caret line="328" lean-forward="true" selection-start-line="328" selection-end-line="328" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Revidirani Simpleks/Revidirani_Simpleks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="43" lean-forward="true" selection-start-line="43" selection-end-line="43" />
         </state>
       </provider>
     </entry>

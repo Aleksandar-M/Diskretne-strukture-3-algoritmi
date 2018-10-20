@@ -24,7 +24,7 @@ def unesiUlaz(s):
     if funkcija[0] == "max" or funkcija[0] == "min":
         s.problem = str(funkcija[0])
     else:
-        print("Pogresan unos problema.")
+        print("\n Pogresan unos problema.")
         exit()
 
     s.koefs_problema = np.array(list(map(float, funkcija[1:])))
@@ -62,38 +62,34 @@ def kanonskiOblik(s):
         #s.problem = "min"
         s.koefs_problema *= (-1)
 
-    # Prebacujemo nejednacine u jednacine, vrednosti nejednacine je potrebno da budu b>=0
+    for i in range(s.br_kolona):
+        s.Q = np.append(s.Q, i)
+
+    # Prebacujemo nejednacine u jednacine, kao i uslov da b>=0
     for i in range(s.br_vrsta):
 
-        nule = np.zeros((s.br_vrsta, 1))
-        print("nule:", nule)
+        if s.niz_znakova[i] != "=":
 
-        if s.niz_znakova[i] == ">=":
-            nule[i][0] = -1
-        elif s.niz_znakova[i] == "<=":
-            nule[i][0] = 1
+            nule = np.zeros((s.br_vrsta, 1))
 
-        print("nove nule", nule)
-        s.matricaA = np.append(s.matricaA, nule, axis=1)
+            if s.niz_znakova[i] == ">=":
+                nule[i][0] = -1
+            elif s.niz_znakova[i] == "<=":
+                nule[i][0] = 1
 
-        if s.matricaB[i][0] < 0:
-            s.matricaB[i][0] *= -1
+            s.matricaA = np.append(s.matricaA, nule, axis=1)
 
-        s.niz_znakova[i] = "="
-        s.br_kolona += 1  # izmenjen broj kolona!!
+            if s.matricaB[i][0] < 0:
+                s.matricaB[i][0] *= -1
 
-        s.Q = np.append(s.Q, i)
-        s.P = np.append(s.P, j)
-        j += 1
+            s.niz_znakova[i] = "="
+            s.br_kolona += 1  # izmenjen broj kolona!!
+            s.P = np.append(s.P, j)
+            j += 1
 
     s.Q = np.array(list(map(int, s.Q)))
     s.P = np.array(list(map(int, s.P)))
-
-    if s.problem == max:
-        s.Q = np.append(s.Q, s.br_vrsta+1)
-    else:
-        s.Q = np.append(s.Q, s.br_vrsta)
-
+    print("Q, P na pocetku:", s.Q, s.P)
 
     s.koefs_problema = np.append(s.koefs_problema, np.zeros((1, s.br_vrsta)))
 
@@ -144,14 +140,14 @@ def main():
 
     print(type(s.P))
 
-    if s.problem == "max":
-        s.x = np.array(list(map(int, np.append(np.zeros((1, s.br_vrsta+1)), s.matricaB))))  # obrisano s.br_vrsta +1
-    else:
-        s.x = np.array(list(map(int, np.append(np.zeros((1, s.br_vrsta)), s.matricaB))))
+    # if s.problem == "max":
+    #     s.x = np.array(list(map(int, np.append(np.zeros((1, s.br_vrsta+1)), s.matricaB))))  # obrisano s.br_vrsta +1
+    # else:
+    s.x = np.array(list(map(int, np.append(np.zeros((1, s.br_kolona - len(s.P))), s.matricaB))))
     print("s.x:", s.x)
 
     tmp = 0
-    while tmp < 10:
+    while tmp < 100:
 
         matB = s.matricaA[:, s.P]
         koefsB_u_f = s.koefs_problema[s.P]
@@ -237,19 +233,17 @@ def main():
                 if s.Q[i] == j:
                     indeksj = i
 
-            staroP = s.P
-            staroQ = s.Q
+            if indeksj == 42 or indeksl == 42:
+                print("Greska, nije pronadjen neki od indeksa za j, l")
+                exit()
 
-            print("indeksl, indeksj", indeksl, indeksj)
+            staroP = s.P
+
             s.P = np.delete(s.P, indeksl)
-            print("s.P posle del indeksal, indeksl, indeksj", s.P, indeksl, indeksj)
             s.P = np.sort(np.append(s.P, s.Q[indeksj]))
-            print("s.P posle dod s.Q[indeksj], indeksl, indeksj", s.P, s.Q[indeksj], indeksl, indeksj)
             s.Q = np.delete(s.Q, indeksj)
-            print("s.Q posle del indeksaj, indeksl, indeksj", s.Q, indeksl, indeksj)
             s.Q = np.sort(np.append(s.Q, staroP[indeksl]))
-            print("s.Q posle dod staroP[indeksl], indeksl, indeksj", s.Q, staroP[indeksl], indeksl, indeksj)
-            print("novo l, P, Q, f", l , s.P, s.Q)
+            print("novo P, Q", s.P, s.Q)
 
             tmp += 1
 

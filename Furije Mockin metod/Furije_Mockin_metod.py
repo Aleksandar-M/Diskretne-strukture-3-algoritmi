@@ -4,9 +4,9 @@ import numpy
 def unesiUlaz(indikator):
 
     if indikator == 1:
-        ulaz = raw_input("Unesite broj nejednacina i broj nepoznatih (oblika Ax <= b, racunajuci i podrazumevane x1>=0...):")
+        ulaz = input("Unesite broj nejednacina i broj nepoznatih (oblika Ax <= b, racunajuci i podrazumevane x1>=0...):")
     elif indikator == 2:
-        ulaz = raw_input("Unesite broj nejednacina i broj nepoznatih (oblika Ax >= b, NE racunajuci podrazumevane x1>=0...):")
+        ulaz = input("Unesite broj nejednacina i broj nepoznatih (oblika Ax >= b, NE racunajuci podrazumevane x1>=0...):")
 
     n = int(ulaz.split(" ")[0])
     m = int(ulaz.split(" ")[1])
@@ -16,7 +16,7 @@ def unesiUlaz(indikator):
 
     for i in range(n):
 
-        linija = raw_input("Unesite sve koeficijente nejednacine:")
+        linija = input("Unesite sve koeficijente nejednacine:")
         koefs = list(map(float, linija.split(" ")))
 
         for j in range(m+1):
@@ -132,9 +132,9 @@ def proveriResenje(matA, matB, tacka):
             netacno += 1
 
     if netacno == 0:
-        print("Pripada")
+        print("\n Pripada")
     else:
-        print("Ne pripada")
+        print("\n Ne pripada")
 
     return exit()
 
@@ -160,7 +160,7 @@ def main():
     matB = numpy.array([])
     indikator = 0
 
-    f = raw_input("Unesite koeficijente funkcije cilja ili karakter n ako nema:")
+    f = input("Unesite koeficijente funkcije cilja ili karakter n ako nema:")
 
     # Ciljnu funkciju prevodimo u oblik f = ... i zamenjujemo u ostalim ogranicenjima
     if f != "n":
@@ -217,7 +217,7 @@ def main():
         matA = ulaz[0]
         matB = ulaz[1]
 
-        ulaznaTacka = raw_input("Unesite tacku za proveru, ako nema unesite karakter n:")
+        ulaznaTacka = input("Unesite tacku za proveru, ako nema unesite karakter n:")
 
         if ulaznaTacka != "n":
 
@@ -316,11 +316,11 @@ def main():
                     netacno += 1
 
             if netacno == 0:
-                print("Sistem ima resenja")
+                print("\n Sistem ima resenja")
                 ima_resenje = 1
             else:
                 ima_resenje = 0
-                print("Sistem nema resenja")
+                print("\n Sistem nema resenja")
 
             if ima_resenje == 1:
                 nadjiResenja(niz_matricaA, niz_matricaB, niz_zap_jna, indikator)
