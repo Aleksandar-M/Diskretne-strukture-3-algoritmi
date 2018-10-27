@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class Sistem:
 
     def __init__(self):
@@ -65,7 +64,7 @@ def kanonskiOblik(s):
     for i in range(s.br_kolona):
         s.Q = np.append(s.Q, i)
 
-    # Prebacujemo nejednacine u jednacine, kao i uslov da b>=0
+    # Prebacujemo nejednacine u jednacine
     for i in range(s.br_vrsta):
 
         if s.niz_znakova[i] != "=":
@@ -79,8 +78,6 @@ def kanonskiOblik(s):
 
             s.matricaA = np.append(s.matricaA, nule, axis=1)
 
-            # if s.matricaB[i][0] < 0:
-            #     s.matricaB[i][0] *= -1
 
             s.niz_znakova[i] = "="
             s.br_kolona += 1         # Izmenjen broj kolona
@@ -109,36 +106,44 @@ def pronadjiIndeks(koefs, s):
             return s.Q[i]
 
 
+# Pomocna funkcija za lep ispis matrice
+def ispisiMatricu(mat):
+    
+    for vrsta in mat:
+        for kolona in vrsta:
+            if kolona >= 0:
+                print(" ", round(kolona), sep="", end=" ")
+            else:
+                print(round(kolona), end=" ")
+        print("")
+    print("")
+
 def main():
 
     s = Sistem()
-
+    
     unesiUlaz(s)
     kanonskiOblik(s)
-    print("\n", s.br_vrsta,
-          s.br_kolona,
-          s.rez_funkcije,
-          s.problem,
-          s.koefs_problema,
-          s.niz_znakova,
-          "\n", s.matricaA,
-          "\n", s.matricaB,
-          "\n Q, P na pocetku:", s.Q, s.P
-          )
+    print("\n\nQ, P na pocetku:", s.Q+1, s.P+1)
 
     s.x = np.array(list(map(int, np.append(np.zeros((1, s.br_kolona - len(s.P))), s.matricaB))))
     print("Pocetno resenje:", s.x)
+
+    matB = s.matricaA[:, s.P]
 
     iteracija = 1
     while iteracija < 100:
 
         print("Iteracija :", iteracija)
-        matB = s.matricaA[:, s.P]
+
         matN = s.matricaA[:, s.Q]
         koefsB_u_f = s.koefs_problema[s.P]
         koefsN_u_f = s.koefs_problema[s.Q]
-        print("matB, matN: \n", matB, "\n", matN)
-
+        print("matB:")
+        ispisiMatricu(matB)
+        print("matN:")
+        ispisiMatricu(matN)
+            
         u_rez = np.linalg.solve(matB.transpose(), koefsB_u_f)
         print("Resenje sistema za u:\n", u_rez)
 
@@ -154,9 +159,9 @@ def main():
         j = pronadjiIndeks(CN_prim, s)
         print("j je:", j)
 
-        #print(matB, "\n", s.matricaA[:, [j]])
         y_rez = np.linalg.solve(matB, s.matricaA[:, [j]])
-        print("Resenje sistema za y:\n", y_rez)
+        print("Resenje sistema za y:")
+        ispisiMatricu(y_rez)
 
         # Provera ako je problem neogranicen
         br_neg = 0
@@ -193,7 +198,12 @@ def main():
 
                 elif i in s.P:
 
-                    x_novo[i] = s.x[i] - t_kapa*y_rez[pom]
+                    p = 42
+                    for d in range(len(s.P)):
+                        if i == s.P[d]:
+                            p = d
+                            
+                    x_novo[i] = s.x[i] - t_kapa*y_rez[p]
                     pom += 1
 
                 elif i in s.Q:
@@ -224,12 +234,24 @@ def main():
                 exit()
 
             # Pravimo novo P, Q
-            staroP = s.P
-            s.P = np.delete(s.P, indeksl)
-            s.P = np.sort(np.append(s.P, s.Q[indeksj]))
-            s.Q = np.delete(s.Q, indeksj)
-            s.Q = np.sort(np.append(s.Q, staroP[indeksl]))
-            print("Novo P, Q", s.P, s.Q)
+            staroP = np.copy(s.P)
+            s.P[indeksl] = s.Q[indeksj]
+            s.Q[indeksj] = staroP[indeksl]
+            print("Novo P, Q:", s.P+1, s.Q+1)
+
+            # Pravimo eta matricu
+            matE = np.identity(len(s.P))
+            novaKolona = y_rez
+            leviKraj = matE[:, :indeksl]
+            desniKraj = matE[:, indeksl+1:]
+            leviKraj = np.append(leviKraj, novaKolona, axis=1)
+            leviKraj = np.append(leviKraj, desniKraj, axis=1)
+            matE = leviKraj
+            print("matrica E:")
+            ispisiMatricu(leviKraj)
+
+            # Pravimo novu matricu B kao staro B pomnozeno sa eta matricom
+            matB = np.dot(matB, matE)
 
             iteracija += 1
 
