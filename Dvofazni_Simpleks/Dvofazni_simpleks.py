@@ -60,7 +60,7 @@ def kanonskiOblik(s):
 
     # Prebacujemo u problem nalazenja minimuma
     if s.problem == "max":
-        s.problem = "min"
+        #s.problem = "min"
         s.koefs_problema *= (-1)
 
     for i in range(s.br_kolona):
@@ -295,101 +295,111 @@ def simplex(s):
 
 def tablicni_simpleks(s):
 
-    for k in range(len(s.koefs_problema)):
+    iteracija = 0
+    while iteracija < 100:
+        print("ITERACIJAA", iteracija)
+        for k in range(len(s.koefs_problema)):
+            print("k koeficijenti problema", k, s.koefs_problema)
 
-        if s.koefs_problema[k] < 0:
-            print("skoef", s.koefs_problema[k], k)
+            if s.koefs_problema[k] < 0:
+                print("skoef", s.koefs_problema[k], k)
 
-            # Provera da li su svi iznad c negativni ako T -> neogranicen problem
-            br_negativnih = 0
-            for m in range(s.br_vrsta):
-                if s.matricaA[m][k] >= 0:
-                    break
-                else:
-                    br_negativnih += 1
+                # Provera da li su svi iznad c negativni ako T -> neogranicen problem
+                br_negativnih = 0
+                for m in range(s.br_vrsta):
+                    if s.matricaA[m][k] >= 0:
+                        break
+                    else:
+                        br_negativnih += 1
 
-            if br_negativnih == s.br_vrsta:
-                print("Neogranicen problem")
-                exit()
+                if br_negativnih == s.br_vrsta:
+                    print("Neogranicen problem")
+                    exit()
 
-            # Trazimo pivot
-            min = 100
-            pivot_vrsta = 50
-            pivot_kolona = 50
-            pivot_vrednost = 50
-            for i in range(s.br_vrsta):
-                if s.matricaA[i][k] > 0:
-                    nova_vr = s.matricaB[i][0] / s.matricaA[i][k]
+                # Trazimo pivot
+                min = 100
+                pivot_vrsta = 50
+                pivot_kolona = 50
+                pivot_vrednost = 50
+                for i in range(s.br_vrsta):
+                    if s.matricaA[i][k] > 0:
+                        nova_vr = s.matricaB[i][0] / s.matricaA[i][k]
 
-                    # Trenutni min
-                    if min > nova_vr:
-                        min = nova_vr
-                        pivot_vrsta = i
-                        pivot_kolona = k
-                        pivot_vrednost = s.matricaA[i][k]
-
-
-            print("pivot vrsta, kolona, vrednost", pivot_vrsta, pivot_kolona, pivot_vrednost)
-
-            for i in range(s.br_vrsta):
-
-                if i != pivot_vrsta:
-                    print("starmo smatA", s.matricaA[i])
-                    stara_pivot_kolona = s.matricaA[i][pivot_kolona]
-                    print("sdsadas", stara_pivot_kolona)
-                    s.matricaA[i] = s.matricaA[i] + (-1)*stara_pivot_kolona/pivot_vrednost*s.matricaA[pivot_vrsta]
-                    print("s.m..", s.matricaA[i], (-1)*stara_pivot_kolona,pivot_vrednost)
-                    s.matricaB[i] = s.matricaB[i] + (-1) * stara_pivot_kolona / pivot_vrednost * s.matricaB[pivot_vrsta]
-
-                stara_pivot_kolona_c = s.koefs_problema[pivot_kolona]
-                s.koefs_problema = s.koefs_problema + (-1) * stara_pivot_kolona_c / pivot_vrednost * s.matricaA[pivot_vrsta]
-                s.rez_funkcije = s.rez_funkcije + (-1)*stara_pivot_kolona_c/pivot_vrednost * s.matricaB[pivot_vrsta]
+                        # Trenutni min
+                        if min > nova_vr:
+                            min = nova_vr
+                            pivot_vrsta = i
+                            pivot_kolona = k
+                            pivot_vrednost = s.matricaA[i][k]
 
 
-                print("pblabla ::\n", s.br_vrsta,
-                      s.br_kolona,
-                      s.rez_funkcije,
-                      s.problem,
-                      s.koefs_problema,
-                      s.niz_znakova,
-                      s.matricaA,
-                      s.matricaB,
-                      s.P,
-                      s.Q,
-                      s.x)
+                print("pivot vrsta, kolona, vrednost", pivot_vrsta, pivot_kolona, pivot_vrednost)
 
-            # Delimo celu vrstu sa trenutnim pivotom
-            if pivot_vrednost != 0:
-                s.matricaA[pivot_vrsta] = s.matricaA[pivot_vrsta] / pivot_vrednost
-                s.matricaB[pivot_vrsta] = s.matricaB[pivot_vrsta] / pivot_vrednost
+                for i in range(s.br_vrsta):
 
-    br_pozitivnih = 0
-    for i in range(len(s.koefs_problema)):
-        if s.koefs_problema[k] >= 0:
-            br_pozitivnih += 1
+                    if i != pivot_vrsta:
+                        print("starmo smatA", s.matricaA[i])
+                        stara_pivot_kolona = s.matricaA[i][pivot_kolona]
+                        print("sdsadas", stara_pivot_kolona)
+                        s.matricaA[i] = s.matricaA[i] + (-1)*stara_pivot_kolona/pivot_vrednost*s.matricaA[pivot_vrsta]
+                        print("s.m..", s.matricaA[i], (-1)*stara_pivot_kolona,pivot_vrednost)
+                        s.matricaB[i] = s.matricaB[i] + (-1) * stara_pivot_kolona / pivot_vrednost * s.matricaB[pivot_vrsta]
 
-    if br_pozitivnih == len(s.koefs_problema):
-        print("Kraj ::\n", s.br_vrsta,
-              s.br_kolona,
-              s.rez_funkcije,
-              s.problem,
-              s.koefs_problema,
-              s.niz_znakova,
-              "\n", s.matricaA,
-              "\n", s.matricaB,"\n",
-              s.P,
-              s.Q,
-              s.x)
+                    stara_pivot_kolona_c = s.koefs_problema[pivot_kolona]
+                    s.koefs_problema = s.koefs_problema + (-1) * stara_pivot_kolona_c / pivot_vrednost * s.matricaA[pivot_vrsta]
+                    s.rez_funkcije = s.rez_funkcije + (-1)*stara_pivot_kolona_c/pivot_vrednost * s.matricaB[pivot_vrsta]
 
-        # pronalazenje optimalnog resenja
-        opt_resenje = np.zeros(s.br_kolona)
-        for i in range(s.br_kolona):
-            jedinica = np.where(s.matricaA[:, i] == 1)[0]
 
-            if len(jedinica) == 1:
-                opt_resenje[i] = s.matricaB[jedinica[0]]
+                    print("pblabla ::\n", s.br_vrsta,
+                          s.br_kolona,
+                          s.rez_funkcije,
+                          s.problem,
+                          s.koefs_problema,
+                          s.niz_znakova,
+                          s.matricaA,
+                          s.matricaB,
+                          s.P,
+                          s.Q,
+                          s.x)
 
-        print("Optimalno resenje:\n", opt_resenje)
+                # Delimo celu vrstu sa trenutnim pivotom
+                if pivot_vrednost != 0:
+                    s.matricaA[pivot_vrsta] = s.matricaA[pivot_vrsta] / pivot_vrednost
+                    s.matricaB[pivot_vrsta] = s.matricaB[pivot_vrsta] / pivot_vrednost
+
+        br_pozitivnih = 0
+        for i in range(len(s.koefs_problema)):
+            if s.koefs_problema[i] >= 0:
+                br_pozitivnih += 1
+
+        if br_pozitivnih == len(s.koefs_problema):
+            print("Kraj ::\n", s.br_vrsta,
+                  s.br_kolona,
+                  s.rez_funkcije,
+                  s.problem,
+                  s.koefs_problema,
+                  s.niz_znakova,
+                  "\n", s.matricaA,
+                  "\n", s.matricaB,"\n",
+                  s.P,
+                  s.Q,
+                  s.x)
+            if s.problem == "min":
+                print("min f:", s.rez_funkcije[0]*(-1))
+            else:
+                print("max f:", s.rez_funkcije[0])
+            # pronalazenje optimalnog resenja
+            opt_resenje = np.zeros(s.br_kolona)
+            for i in range(s.br_kolona):
+                jedinica = np.where(s.matricaA[:, i] == 1)[0]
+
+                if len(jedinica) == 1:
+                    opt_resenje[i] = s.matricaB[jedinica[0]]
+
+            print("Optimalno resenje:\n", opt_resenje)
+            return
+
+        iteracija += 1
 
 
 def main():
