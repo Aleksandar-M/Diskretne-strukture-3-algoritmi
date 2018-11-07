@@ -1,7 +1,8 @@
 import numpy as np
 import copy
 
-np.set_printoptions(suppress=True, precision=2)
+np.set_printoptions(suppress=True, precision=3)
+
 
 class Sistem:
 
@@ -53,6 +54,7 @@ def unesiUlaz(s):
                 s.matricaA[i][j] = koefs_nejednacine[j]
 
     print("niz znakova", len(s.niz_znakova))
+
 
 # Funkcija za svodjenje na kanonski oblik
 def kanonskiOblik(s):
@@ -108,203 +110,77 @@ def pronadjiIndeks(koefs, s):
             return s.Q[i]
 
 
-# Pomocna funkcija za lep ispis matrice
-def ispisiMatricu(mat):
-    for vrsta in mat:
-        for kolona in vrsta:
-            if kolona >= 0:
-                print(" ", round(kolona), sep="", end=" ")
-            else:
-                print(round(kolona), end=" ")
-        print("")
-    print("")
+def ispis(s2):
+
+    mat = s2.matricaA
+    mat2 = s2.matricaB
+
+    for i in range(len(mat)):
+        for j in range(len(mat[0])):
+            print('{: 3.2f}'.format(mat[i][j]), end=" ")
+        print('{: 3.2f}'.format(mat2[i][0]))
+
+    for i in range(len(s2.koefs_problema)):
+        print('{: 3.2f}'.format(s2.koefs_problema[i]), end=" ")
+    print(s2.rez_funkcije)
+
+    print("-----------------")
 
 
-def simplex(s):
-    s.x = np.array(list(map(int, np.append(np.zeros((1, s.br_kolona - len(s.P))), s.matricaB))))
-    print("Pocetno resenje:", s.x)
+# Pomocna funkcija za obavljanje elementarnih transfomacija nad matricom
+def elem_transformacije(s2, pivot_vrsta, pivot_kolona, pivot_vrednost):
 
-    matB = s.matricaA[:, s.P]
+    for k in range(s2.br_vrsta):
 
-    # for i in range(s.br_kolona):
-    #     if sum(s.matricaA[:, i]) == 1:
-    #         print("JESAM JEDNAK KECU, indeks i, nizP", i, s.P)
-    #         print(s.matricaA[:, i])
-    #
-    #         if s.koefs_problema[i] != 0:
-    #
-    #             for t in range(s.br_vrsta):
-    #                 if s.matricaA[t][i] == 1:
-    #                     indeks_1 = t
-    #
-    #             s.koefs_problema = s.koefs_problema + (-1)*s.koefs_problema[i]*s.matricaA[indeks_1, :]
-    #             print("----", s.rez_funkcije, (-1)*s.koefs_problema[i], s.matricaB[indeks_1, :])
-    #             s.rez_funkcije = s.rez_funkcije + (-1)*s.matricaB[indeks_1, :]
-    #
-    # print("pblabla ::\n", s.br_vrsta,
-    #       s.br_kolona,
-    #       s.rez_funkcije,
-    #       s.problem,
-    #       s.koefs_problema,
-    #       s.niz_znakova,
-    #       s.matricaA,
-    #       s.matricaB,
-    #       s.P,
-    #       s.Q,
-    #       s.x)
+        if k != pivot_vrsta:
+            stara_pivot_kolona = s2.matricaA[k][pivot_kolona]
+            s2.matricaA[k] = s2.matricaA[k] + (-1) * stara_pivot_kolona / pivot_vrednost * s2.matricaA[
+                pivot_vrsta]
+            s2.matricaB[k] = s2.matricaB[k] + (-1) * stara_pivot_kolona / pivot_vrednost * s2.matricaB[
+                pivot_vrsta]
+
+        stara_pivot_kolona_c = s2.koefs_problema[pivot_kolona]
+        s2.koefs_problema = s2.koefs_problema + (-1) * stara_pivot_kolona_c / pivot_vrednost * s2.matricaA[
+            pivot_vrsta]
+        s2.rez_funkcije = s2.rez_funkcije + (-1) * stara_pivot_kolona_c / pivot_vrednost * s2.matricaB[
+            pivot_vrsta]
+
+    # Delimo celu vrstu sa trenutnim pivotom
+    if pivot_vrednost != 0:
+        s2.matricaA[pivot_vrsta] = s2.matricaA[pivot_vrsta] / pivot_vrednost
+        s2.matricaB[pivot_vrsta] = s2.matricaB[pivot_vrsta] / pivot_vrednost
 
 
-    iteracija = 1
-    while iteracija < 100:
+# Pomocna funkcija za transformisanje koeficijenata ispod bazisnih kolona
+def ciscenje_koefs_problema(s3):
 
-        print("Iteracija :", iteracija)
+    for i in range(s3.br_kolona):
 
-        matN = s.matricaA[:, s.Q]
-        koefsB_u_f = s.koefs_problema[s.P]
-        koefsN_u_f = s.koefs_problema[s.Q]
-        print("matB:")
-        ispisiMatricu(matB)
-        print("matN:")
-        ispisiMatricu(matN)
+        jedinice = np.where(s3.matricaA[:, i] == 1)[0]
+        nule = np.where(s3.matricaA[:, i] == 0)[0]
 
-        u_rez = np.linalg.solve(matB.transpose(), koefsB_u_f)
-        print("Resenje sistema za u:\n", u_rez)
+        if len(jedinice) == 1 and len(nule) == s3.br_vrsta - 1:
 
-        CN_prim = koefsN_u_f - np.dot(u_rez, matN)
-        print("Novi koeficijenti:\n", CN_prim)
+            stari_koef = s3.koefs_problema[i]
+            if stari_koef != 0:
+                indeks_1 = jedinice[0]
+                s3.koefs_problema = s3.koefs_problema + (-1) * stari_koef * s3.matricaA[indeks_1, :]
+                s3.rez_funkcije = s3.rez_funkcije + (-1) * stari_koef * s3.matricaB[indeks_1, :]
 
-        # Ako su svi koeficijenti pozitivni, nasli smo optimalno resenje
-        if proveriUslov(CN_prim):
-            print("\nx optimalno:", s.x)
-            print("Konacno f:", np.sum(s.koefs_problema * s.x))
-            #exit()
-
-            print("pre returna ::\n", s.br_vrsta,
-                  s.br_kolona,
-                  s.rez_funkcije,
-                  s.problem,
-                  s.koefs_problema,
-                  s.niz_znakova,
-                  s.matricaA,
-                  s.matricaB,
-                  s.P,
-                  s.Q,
-                  s.x)
-
-            return 1
-
-
-        j = pronadjiIndeks(CN_prim, s)
-        print("j je:", j)
-
-        y_rez = np.linalg.solve(matB, s.matricaA[:, [j]])
-        print("Resenje sistema za y:")
-        ispisiMatricu(y_rez)
-
-        # Provera ako je problem neogranicen
-        br_neg = 0
-        for i in range(len(y_rez)):
-            if y_rez[i] <= 0:
-                br_neg += 1
-
-        if br_neg == len(y_rez):
-
-            print("STOP: Problem je neogranicen")
-            exit()
-
-        else:
-
-            vrednosti = np.array([])
-            pom = 0
-
-            for i in s.P:
-
-                if y_rez[pom] > 0:
-                    vrednosti = np.append(vrednosti, s.x[i] / y_rez[pom])
-
-                pom += 1
-
-            t_kapa = vrednosti.min()
-            print("t kapa:", t_kapa)
-
-            x_novo = np.zeros(len(s.x))
-            pom = 0
-
-            for i in range(len(s.x)):
-                if i == j:
-                    x_novo[i] = t_kapa
-
-                elif i in s.P:
-
-                    p = 42
-                    for d in range(len(s.P)):
-                        if i == s.P[d]:
-                            p = d
-
-                    x_novo[i] = s.x[i] - t_kapa * y_rez[p]
-                    pom += 1
-
-                elif i in s.Q:
-                    x_novo[i] = 0
-
-            print("x novo:", x_novo)
-            s.x = x_novo
-
-            l = 42
-            for i in s.P:
-                if s.x[i] == 0:
-                    l = i
-
-            print("l je:", l)
-
-            indeksl = 42
-            indeksj = 42
-            for i in range(len(s.P)):
-                if s.P[i] == l:
-                    indeksl = i
-
-            for i in range(len(s.Q)):
-                if s.Q[i] == j:
-                    indeksj = i
-
-            if indeksj == 42 or indeksl == 42:
-                print("Greska, nije pronadjen neki od indeksa za j, l")
-                exit()
-
-            # Pravimo novo P, Q
-            staroP = np.copy(s.P)
-            s.P[indeksl] = s.Q[indeksj]
-            s.Q[indeksj] = staroP[indeksl]
-            print("Novo P, Q:", s.P + 1, s.Q + 1)
-
-            # Pravimo eta matricu
-            matE = np.identity(len(s.P))
-            novaKolona = y_rez
-            leviKraj = matE[:, :indeksl]
-            desniKraj = matE[:, indeksl + 1:]
-            leviKraj = np.append(leviKraj, novaKolona, axis=1)
-            leviKraj = np.append(leviKraj, desniKraj, axis=1)
-            matE = leviKraj
-            print("matrica E:")
-            ispisiMatricu(leviKraj)
-
-            # Pravimo novu matricu B kao staro B pomnozeno sa eta matricom
-            matB = np.dot(matB, matE)
-
-            iteracija += 1
+        ispis(s3)
 
 def tablicni_simpleks(s):
 
-    iteracija = 0
+    iteracija = 1
+
     while iteracija < 100:
-        print("ITERACIJAA", iteracija)
+        print("Iteracija:", iteracija)
+
         for k in range(len(s.koefs_problema)):
-            print("k koeficijenti problema", k, s.koefs_problema)
 
             if s.koefs_problema[k] < 0:
-                print("skoef", s.koefs_problema[k], k)
 
-                # Provera da li su svi iznad c negativni ako T -> neogranicen problem
+                # Provera da li su svi iznad c negativni; ako je T -> neogranicen problem
                 br_negativnih = 0
                 for m in range(s.br_vrsta):
                     if s.matricaA[m][k] >= 0:
@@ -326,77 +202,46 @@ def tablicni_simpleks(s):
                         nova_vr = s.matricaB[i][0] / s.matricaA[i][k]
 
                         # Trenutni min
-                        if min > nova_vr:
+                        #if min >= nova_vr:     # Bez koriscenje pravila
+                        if min > nova_vr:     # Koriscenjem Blendovog pravila
                             min = nova_vr
                             pivot_vrsta = i
                             pivot_kolona = k
                             pivot_vrednost = s.matricaA[i][k]
 
+                elem_transformacije(s, pivot_vrsta, pivot_kolona, pivot_vrednost)
+                break
 
-                print("pivot vrsta, kolona, vrednost", pivot_vrsta, pivot_kolona, pivot_vrednost)
+        ispis(s)
 
-                for i in range(s.br_vrsta):
-
-                    if i != pivot_vrsta:
-                        print("starmo smatA", s.matricaA[i])
-                        stara_pivot_kolona = s.matricaA[i][pivot_kolona]
-                        print("sdsadas", stara_pivot_kolona)
-                        s.matricaA[i] = s.matricaA[i] + (-1)*stara_pivot_kolona/pivot_vrednost*s.matricaA[pivot_vrsta]
-                        print("s.m..", s.matricaA[i], (-1)*stara_pivot_kolona,pivot_vrednost)
-                        s.matricaB[i] = s.matricaB[i] + (-1) * stara_pivot_kolona / pivot_vrednost * s.matricaB[pivot_vrsta]
-
-                    stara_pivot_kolona_c = s.koefs_problema[pivot_kolona]
-                    s.koefs_problema = s.koefs_problema + (-1) * stara_pivot_kolona_c / pivot_vrednost * s.matricaA[pivot_vrsta]
-                    s.rez_funkcije = s.rez_funkcije + (-1)*stara_pivot_kolona_c/pivot_vrednost * s.matricaB[pivot_vrsta]
-
-
-                    print("pblabla ::\n", s.br_vrsta,
-                          s.br_kolona,
-                          s.rez_funkcije,
-                          s.problem,
-                          s.koefs_problema,
-                          s.niz_znakova,
-                          s.matricaA,
-                          s.matricaB,
-                          s.P,
-                          s.Q,
-                          s.x)
-
-                # Delimo celu vrstu sa trenutnim pivotom
-                if pivot_vrednost != 0:
-                    s.matricaA[pivot_vrsta] = s.matricaA[pivot_vrsta] / pivot_vrednost
-                    s.matricaB[pivot_vrsta] = s.matricaB[pivot_vrsta] / pivot_vrednost
-
+        # Proveravamo da li su svi c-ovi nenegativni; ako T -> nasli smo optimalno resenje
         br_pozitivnih = 0
         for i in range(len(s.koefs_problema)):
             if s.koefs_problema[i] >= 0:
                 br_pozitivnih += 1
 
+        # Ispisujemo optimalno i vrednost funkcije
         if br_pozitivnih == len(s.koefs_problema):
-            print("Kraj ::\n", s.br_vrsta,
-                  s.br_kolona,
-                  s.rez_funkcije,
-                  s.problem,
-                  s.koefs_problema,
-                  s.niz_znakova,
-                  "\n", s.matricaA,
-                  "\n", s.matricaB,"\n",
-                  s.P,
-                  s.Q,
-                  s.x)
-            if s.problem == "min":
-                print("min f:", s.rez_funkcije[0]*(-1))
-            else:
-                print("max f:", s.rez_funkcije[0])
+
             # pronalazenje optimalnog resenja
             opt_resenje = np.zeros(s.br_kolona)
             for i in range(s.br_kolona):
-                jedinica = np.where(s.matricaA[:, i] == 1)[0]
 
-                if len(jedinica) == 1:
-                    opt_resenje[i] = s.matricaB[jedinica[0]]
+                jedinice = np.where(s.matricaA[:, i] == 1)[0]
+                nule = np.where(s.matricaA[:, i] == 0)[0]
 
-            print("Optimalno resenje:\n", opt_resenje)
+                if len(jedinice) == 1 and len(nule) == s.br_vrsta - 1:
+                    opt_resenje[i] = s.matricaB[jedinice[0]]
+
+            if s.problem == "min":
+                print("\nmin f:", s.rez_funkcije[0]*(-1))
+            else:
+                print("\nmax f:", s.rez_funkcije[0])
+
+            print("Optimalno resenje:\n", end="")
+            for i in range(len(opt_resenje)):
+                print('{: 3.2f}'.format(opt_resenje[i]), end=" ")
+            print("")
             return
 
         iteracija += 1
@@ -405,50 +250,35 @@ def tablicni_simpleks(s):
 def main():
 
     s = Sistem()
-
     unesiUlaz(s)
-
     jedn_ili_vece = np.copy(s.niz_znakova)
 
-
-    print("jedn ili vece:", jedn_ili_vece)
-    print("sve::\n", s.br_vrsta,
+    print("Ulaz:\n", s.br_vrsta,
           s.br_kolona,
           s.rez_funkcije,
           s.problem,
-          s.koefs_problema,
-          s.niz_znakova,
-          s.matricaA,
-          s.matricaB,
-          s.P,
-          s.Q,
-          s.x)
+          s.niz_znakova)
+    ispis(s)
 
     kanonskiOblik(s)
-    print("sve kanonski::\n", s.br_vrsta,
+    print("U kanonskom obliku:\n", s.br_vrsta,
           s.br_kolona,
           s.rez_funkcije,
           s.problem,
-          s.koefs_problema,
-          s.niz_znakova,
-          s.matricaA,
-          s.matricaB,
-          s.P,
-          s.Q,
-          s.x)
-    print("\n\nQ, P na pocetku:", s.Q + 1, s.P + 1)
+          s.niz_znakova)
+    ispis(s)
 
-    sl_dvofaznog = 1                # RUCNO PROMENI DA RADI DVOFAZNI---
+    sl_dvofaznog = 1                #######
     if sl_dvofaznog:
-        print("prvi test dvofaznog")
+
+        print("\n######################Prva faza:######################\n")
         s2 = Sistem()
         s2 = copy.deepcopy(s)
         s2.koefs_problema = np.zeros((len(s.koefs_problema)))
-        print("sada s2", s2.niz_znakova)
-        print("Pravimo pomocni problem:")
 
         for i in range(len(jedn_ili_vece)):
             if jedn_ili_vece[i] == ">=" or jedn_ili_vece[i] == "=":
+
                 dodatni = np.zeros((s.br_vrsta, 1))
                 dodatni[i] = 1
                 s2.matricaA = np.append(s2.matricaA, dodatni, axis=1)
@@ -459,51 +289,19 @@ def main():
         s2.P = np.array(list(map(int, s2.P)))
 
         vestacke = np.where(s2.koefs_problema == 1)[0]
-        print("vestacke:", vestacke)
 
-        print("nova matrica A i sve za s2::\n", s2.br_vrsta,
-              s2.br_kolona,
-              s2.rez_funkcije,
-              s2.problem,
-              s2.koefs_problema,
-              s2.niz_znakova,
-              s2.matricaA,
-              s2.matricaB,
-              s2.P,
-              s2.Q,
-              s2.x)
+        ispis(s2)
 
-        for i in range(s2.br_kolona):
-            if len(np.where(s2.matricaA[:, i] == 1)[0]) == 1:  #!= 0:
-                print("jednak 1, indeks i, nizP", i, s2.P)
-                print(s2.matricaA[:, i])
+        # Vrsimo elementarne transformacije kako bi dobili bazisne kolone
+        ciscenje_koefs_problema(s2)
 
-                if s2.koefs_problema[i] != 0:
-
-                    for t in range(s2.br_vrsta):
-                        if s2.matricaA[t][i] == 1:
-                            indeks_1 = t
-
-                    s2.koefs_problema = s2.koefs_problema + (-1)*s2.koefs_problema[i]*s2.matricaA[indeks_1, :]
-                    print("----", s2.rez_funkcije, (-1)*s2.koefs_problema[i], s2.matricaB[indeks_1, :])
-                    s2.rez_funkcije = s2.rez_funkcije + (-1)*s2.matricaB[indeks_1, :]
-
-        print("Izlaz nakon anuliranja ispod jedinicne kolone::\n", s2.br_vrsta,
-              s2.br_kolona,
-              s2.rez_funkcije,
-              s2.problem,
-              s2.koefs_problema,
-              s2.niz_znakova,
-              s2.matricaA,
-              s2.matricaB,
-              s2.P,
-              s2.Q,
-              s2.x)
+        ispis(s2)
+        print("Trenutna vrednost funkcije:", s2.rez_funkcije[0])
 
         print("Pozivamo tablicni simplex u prvoj fazi:")
         tablicni_simpleks(s2)
 
-        # Brisanje vestackih promenljivih                       ZAHTEVA PREPRAVKU!!!!!!!!!!!!!!!!!
+        # Brisanje vestackih promenljivih
         pom = np.array([])
         for i in vestacke:
             if len(np.where(s2.matricaA[:, i] == 1)[0]) != 1 or \
@@ -514,155 +312,56 @@ def main():
                 pom = np.append(pom, i)
                 vestacke = np.delete(vestacke, np.where(vestacke == i))
 
-        print("nakon prvog dela NE brisanja pom vesstacke:", s2.matricaA, s2.koefs_problema, s2.br_kolona, pom, vestacke)
-
+        # Prolazimo preostale vestacke bazisne kolone i brisemo odgovarajucu vrstu ako su sve nule u vrsti ili
+        # nalazimo pivot i obavljamo transformacije
         for i in vestacke:
-            print("i i broj kolona", i, vestacke)
-            print("ima keceva u koloni:", np.where(s2.matricaA[:, i] == 1)[0])
-            print("ima nula u koloni:", np.where(s2.matricaA[:, i] == 0)[0])
 
+            jedinice = np.where(s2.matricaA[:, i] == 1)[0]
+            nule = np.where(s2.matricaA[:, i] == 0)[0]
 
-            if len(np.where(s2.matricaA[:, i] == 1)[0]) == 1 and \
-                    len(np.where(s2.matricaA[:, i] == 0)[0]) == s2.br_vrsta-1:
-                print("indeks_vr (porveriti):", np.where(s2.matricaA[:, i] == 1)[0][0])
-                indeks_vr = np.where(s2.matricaA[:, i] == 1)[0][0]
+            if len(jedinice) == 1 and len(nule) == s2.br_vrsta-1:
 
+                indeks_vr = jedinice[0]
                 ne_nule = np.where(s2.matricaA[indeks_vr, :] != 0)[0]
-                print("ne nule u vrsti", ne_nule)
 
+                # Ako su sve nule u vrsti osim jedinice koja pripada bazisnoj koloni -> brisemo vrstu
                 if len(ne_nule) == 1 and ne_nule[0] == i:
-                    print("brisem govno", s2.matricaA, i)
+
                     s2.matricaA = np.delete(s2.matricaA, indeks_vr, axis=0)
                     s2.br_vrsta -= 1
-                    #pom = np.append(pom, i)
 
-
+                # Nasli smo ne nula vrednost u vrsti, uzimamo za pivot i obavljamo elem. transformacije
                 else:
+
                     #novi pivot je prvi != 0 u toj vrsti
-                    #po njemu sad azuriramo matricu
                     if ne_nule[0] != i:                     # da ne uzmemo bas tog jedinog keca
+
                         pivot_vrsta = indeks_vr
                         pivot_kolona = ne_nule[0]
                         pivot_vrednost = s2.matricaA[pivot_vrsta][pivot_kolona]
-                        print("pivotiranje za ne nule: vrsta kolona vrednost:", pivot_vrsta, pivot_kolona, pivot_vrednost)
 
-                        for k in range(s2.br_vrsta):
+                        elem_transformacije(s2, pivot_vrsta, pivot_kolona, pivot_vrednost)
 
-                            if k != pivot_vrsta:
-                                #print("starmo smatA", s.matricaA[i])
-                                stara_pivot_kolona = s2.matricaA[k][pivot_kolona]
-                                #print("sdsadas", stara_pivot_kolona)
-                                s2.matricaA[k] = s2.matricaA[k] + (-1) * stara_pivot_kolona / pivot_vrednost * s2.matricaA[
-                                    pivot_vrsta]
-                                #print("s.m..", s.matricaA[i], (-1) * stara_pivot_kolona, pivot_vrednost)
-                                s2.matricaB[k] = s2.matricaB[k] + (-1) * stara_pivot_kolona / pivot_vrednost * s2.matricaB[
-                                    pivot_vrsta]
-
-                            stara_pivot_kolona_c = s2.koefs_problema[pivot_kolona]
-                            s2.koefs_problema = s2.koefs_problema + (-1) * stara_pivot_kolona_c / pivot_vrednost * s2.matricaA[
-                                pivot_vrsta]
-                            s2.rez_funkcije = s2.rez_funkcije + (-1) * stara_pivot_kolona_c / pivot_vrednost * s2.matricaB[
-                                pivot_vrsta]
-
-
-                        # Delimo celu vrstu sa trenutnim pivotom - isto kao tamo pre
-                        if pivot_vrednost != 0:
-                            s2.matricaA[pivot_vrsta] = s2.matricaA[pivot_vrsta] / pivot_vrednost
-                            s2.matricaB[pivot_vrsta] = s2.matricaB[pivot_vrsta] / pivot_vrednost
-
-                        print("rez posle slucaja pivotinja nekog novog u vrsti gde je 1::\n", s2.br_vrsta,
-                              s2.br_kolona,
-                              s2.rez_funkcije,
-                              s2.problem,
-                              s2.koefs_problema,
-                              s2.niz_znakova,
-                              s2.matricaA,
-                              s2.matricaB,
-                              s2.P,
-                              s2.Q,
-                              s2.x)
-
+        # Brisemo sve vestacke kolone
         pom = np.append(pom, vestacke)
-        print("pom jeeee", pom)
         s2.matricaA = np.delete(s2.matricaA, pom, axis=1)
         s2.koefs_problema = np.delete(s2.koefs_problema, pom, axis=0)
         s2.br_kolona -= len(pom)
 
-
-        print("vestacke", vestacke)
-        print("nakon prvog dela  brisanja vesstacke:", s2.matricaA, s2.koefs_problema, s2.br_kolona, vestacke)
-
-
-        print("posle sredjivanja::\n", s2.br_vrsta,
-              s2.br_kolona,
-              s2.rez_funkcije,
-              s2.problem,
-              s2.koefs_problema,
-              s2.niz_znakova,
-              s2.matricaA,
-              s2.matricaB,
-              s2.P,
-              s2.Q,
-              s2.x)
-
         if s2.rez_funkcije != 0:
-            print("pomocni problem != 0, problem neodluciv")
+            print("pomocni problem != 0, pocetni problem nije zadovoljiv. STOP")
             exit()
 
-        print("faza 2")
+        print("\n######################Druga faza:######################\n")
 
         s3 = copy.deepcopy(s2)
         s3.koefs_problema = s.koefs_problema
         s3.br_kolona = len(s3.matricaA[0])
         s3.br_vrsta = len(s3.matricaA)
-        print(s3.br_kolona)
 
-        print("pos::\n", s3.br_vrsta,
-              s3.br_kolona,
-              s3.rez_funkcije,
-              s3.problem,
-              s3.koefs_problema,
-              s3.niz_znakova,
-              s3.matricaA,
-              s3.matricaB,
-              s3.P,
-              s3.Q,
-              s3.x)
+        ciscenje_koefs_problema(s3)
 
-        for i in range(s3.br_kolona):
-            if len(np.where(s3.matricaA[:, i] == 1)[0]) == 1:    # != 0
-                print("jednak 1, indeks i, nizP", i, s3.P)
-                print(s3.matricaA[:, i])
-
-                if s3.koefs_problema[i] != 0:
-
-                    for t in range(s3.br_vrsta):
-                        if s3.matricaA[t][i] == 1:
-                            indeks_1 = t
-
-                    stari_koef = s3.koefs_problema[i]
-                    print(s3.koefs_problema , s3.koefs_problema[i], s3.matricaA[indeks_1, :])
-                    s3.koefs_problema = s3.koefs_problema + (-1)*s3.koefs_problema[i]*s3.matricaA[indeks_1, :]
-                    print("sada", s3.koefs_problema)
-                    print("----", s3.rez_funkcije, (-1)*s3.koefs_problema[i], s3.matricaB[indeks_1, :])
-                    s3.rez_funkcije = s3.rez_funkcije + (-1)*stari_koef*s3.matricaB[indeks_1, :]
-                    print("Trenutni rezultat fje:", s3.rez_funkcije)
-
-        print("ulaz za tablicni::\n", s3.br_vrsta,
-              s3.br_kolona,
-              s3.rez_funkcije,
-              s3.problem,
-              s3.koefs_problema,
-              s3.niz_znakova,
-              s3.matricaA,
-              s3.matricaB,
-              s3.P,
-              s3.Q,
-              s3.x)
-
-        #simplex(s3)
         tablicni_simpleks(s3)
-
         exit()
 
     else:
