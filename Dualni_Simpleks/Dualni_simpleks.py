@@ -19,9 +19,12 @@ class Sistem:
         self.Q = np.array([])
         self.x = np.array([])
 
+blend = "da"
 
 # Funkcija za unos
 def unesiUlaz(s):
+    
+    global blend
     funkcija = input("Unesite problem ( u obliku max ili min) i koeficijente funkcije:").split(" ")
 
     if funkcija[0] == "max" or funkcija[0] == "min":
@@ -53,7 +56,9 @@ def unesiUlaz(s):
             else:
                 s.matricaA[i][j] = koefs_nejednacine[j]
 
+    blend = input("Unesite da/ne za koriscenje Blendovog pravila")
     print("niz znakova", len(s.niz_znakova))
+    
 
 # Funkcija za svodjenje na kanonski oblik
 def kanonskiOblik(s):
@@ -126,24 +131,6 @@ def ispis(s2):
     print("-----------------")
 
 
-# Pomocna funkcija za lep ispis matrice
-# def ispisiMatricu(mat, mat2):
-#
-#     for i in range(len(mat)):
-#         print(mat[i], mat2[i])
-#
-#
-#     # for vrsta in mat:
-#     #     for kolona in vrsta:
-#     #         if kolona >= 0:
-#     #             print(" ", round(kolona, 3), sep="", end=" ")
-#     #         else:
-#     #             print(round(kolona, 3), end=" ")
-#     #
-#     #     print("")
-#     # print("")
-
-
 def tablicni_simpleks(s):
 
     iteracija = 1
@@ -177,14 +164,22 @@ def tablicni_simpleks(s):
                         nova_vr = s.koefs_problema[i] / s.matricaA[k][i]
 
                         # Trenutni max
-                        if max <= nova_vr:     # Bez koriscenje pravila
-                        # if max < nova_vr:    # Koriscenjem Blendovog pravila
-                            max = nova_vr
-                            pivot_vrsta = k
-                            pivot_kolona = i
-                            pivot_vrednost = s.matricaA[k][i]
+                        if blend == "da":
+                            if max < nova_vr:    # Koriscenjem Blendovog pravila
+                                max = nova_vr
+                                pivot_vrsta = k
+                                pivot_kolona = i
+                                pivot_vrednost = s.matricaA[k][i]
+                            
+                        else:
+                            if max <= nova_vr:    # Bez koriscenje pravila
+                                max = nova_vr
+                                pivot_vrsta = k
+                                pivot_kolona = i
+                                pivot_vrednost = s.matricaA[k][i]
+                                
 
-                print("Pivot (vrsta, kolona, vrednost):", pivot_vrsta, pivot_kolona, pivot_vrednost)
+                print("Pivot (vrsta, kolona, vrednost):", pivot_vrsta, pivot_kolona, pivot_vrednost, "\n")
 
                 # Obavljamo elementarne transformacije nad ostalim vrstama - vrsimo pivotiranje
                 for i in range(s.br_vrsta):
@@ -229,10 +224,12 @@ def tablicni_simpleks(s):
                 if len(jedinice) == 1 and len(nule) == s.br_vrsta - 1:
                     opt_resenje[i] = s.matricaB[jedinice[0]]
 
+            print("\nKorisceno Blendovo pravilo:", blend)
+            
             if s.problem == "min":
-                print("\nmin f:", s.rez_funkcije[0]*(-1))
+                print("min f:", s.rez_funkcije[0]*(-1))
             else:
-                print("\nmax f:", s.rez_funkcije[0])
+                print("max f:", s.rez_funkcije[0])
 
             print("Optimalno resenje:\n", end="")
             for i in range(len(opt_resenje)):

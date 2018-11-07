@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0644179e-32f7-40b9-ae97-93a0afb147ed" name="Default Changelist" comment="" />
+    <list default="true" id="0644179e-32f7-40b9-ae97-93a0afb147ed" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dualni_Simpleks/Dualni_simpleks.py" beforeDir="false" afterPath="$PROJECT_DIR$/Dualni_Simpleks/Dualni_simpleks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dvofazni_Simpleks/Dvofazni_simpleks.py" beforeDir="false" afterPath="$PROJECT_DIR$/Dvofazni_Simpleks/Dvofazni_simpleks.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -12,42 +16,75 @@
     <session id="-1326017441">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
-          <entry key="project.open.time.0" value="1" />
-          <entry key="project.open.time.6" value="2" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.closed" value="5" />
+          <entry key="project.open.time.0" value="2" />
+          <entry key="project.open.time.6" value="5" />
+          <entry key="project.opened" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="12" />
+          <entry key="Test1" value="4" />
+          <entry key="Test2" value="6" />
+          <entry key="Test3" value="4" />
+          <entry key="Test4" value="3" />
+          <entry key="Test5" value="2" />
+          <entry key="Test6" value="2" />
+          <entry key="Test7" value="1" />
+          <entry key="py" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="12" />
+          <entry key="PLAIN_TEXT" value="22" />
+          <entry key="Python" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="1857" />
-          <entry key="py" value="8095" />
+          <entry key="Python Console" value="2284" />
+          <entry key="Test1" value="38" />
+          <entry key="Test2" value="61" />
+          <entry key="Test3" value="96" />
+          <entry key="Test4" value="140" />
+          <entry key="Test5" value="59" />
+          <entry key="Test6" value="59" />
+          <entry key="Test7" value="116" />
+          <entry key="py" value="18786" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="9952" />
+          <entry key="PLAIN_TEXT" value="560" />
+          <entry key="Python" value="21070" />
+          <entry key="UNKNOWN" value="9" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Revidirani Simpleks/Revidirani_Simpleks.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Dvofazni_Simpleks/Dvofazni_simpleks.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="103">
-              <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+            <state relative-caret-position="376">
+              <caret line="268" column="12" lean-forward="true" selection-start-line="263" selection-start-column="4" selection-end-line="268" selection-end-column="12" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Dualni_Simpleks/Dualni_simpleks.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="53">
+              <caret line="249" column="16" lean-forward="true" selection-start-line="249" selection-start-column="16" selection-end-line="249" selection-end-column="16" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+                <marker date="1541499661312" expanded="true" signature="3569:3647" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -63,18 +100,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>sistem</find>
-      <find>empt</find>
-      <find>izbaci</find>
-      <find>matB</find>
-      <find>s.x</find>
-      <find>raw</find>
-      <find>Ne p</find>
       <find>nema res</find>
       <find>s.problem</find>
       <find>tmp</find>
       <find>x_pom</find>
       <find>j</find>
+      <find>niz_znakova</find>
+      <find>copy</find>
+      <find>s.P</find>
+      <find>s.br_kolona</find>
+      <find>s.x</find>
+      <find>asfl</find>
+      <find>tabli</find>
+      <find>s2</find>
+      <find>br_pozitivnih</find>
+      <find>br_neg</find>
+      <find>vestacke</find>
+      <find>s.koefs_problema</find>
+      <find>np.where</find>
+      <find>Kraj ::</find>
+      <find>if s.niz</find>
+      <find>jedn_ili_vece</find>
+      <find>if len</find>
+      <find>tablicni_sim</find>
+      <find>indeks_1</find>
+      <find>ciscenje_koefs_problema</find>
+      <find>faza</find>
+      <find>ispisi</find>
+      <find>ne nule</find>
+      <find>optimalno</find>
+      <find>Opti</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -88,13 +143,27 @@
         <option value="$PROJECT_DIR$/Revidirani Simpleks (eta matrice)/Revidirani_Simpleks_eta_matrice.py" />
         <option value="$PROJECT_DIR$/Revidirani Simpleks-eta matrice/Revidirani_Simpleks_eta_matrice.py" />
         <option value="$PROJECT_DIR$/Revidirani Simpleks/Revidirani_Simpleks.py" />
+        <option value="$PROJECT_DIR$/Dualni_Simpleks/Revidirani_Simpleks_eta_matrice.py" />
+        <option value="$PROJECT_DIR$/Dvofazni_Simpleks/Revidirani_Simpleks_eta_matrice.py" />
+        <option value="$PROJECT_DIR$/Dvofazni_Simpleks/Test4" />
+        <option value="$PROJECT_DIR$/Dvofazni_Simpleks/Test3" />
+        <option value="$PROJECT_DIR$/Dvofazni_Simpleks/Test5" />
+        <option value="$PROJECT_DIR$/Dvofazni_Simpleks/Test6" />
+        <option value="$PROJECT_DIR$/Dvofazni_Simpleks/Test7" />
+        <option value="$PROJECT_DIR$/Dualni_Simpleks/Test1" />
+        <option value="$PROJECT_DIR$/Dualni_Simpleks/Test2" />
+        <option value="$PROJECT_DIR$/Dualni_Simpleks/Test3" />
+        <option value="$PROJECT_DIR$/Dualni_Simpleks/Test4" />
+        <option value="$PROJECT_DIR$/Dvofazni_Simpleks/Dvofazni_simpleks.py" />
+        <option value="$PROJECT_DIR$/Dualni_Simpleks/Dualni_simpleks.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="36" />
-    <option name="width" value="956" />
-    <option name="height" value="1044" />
+    <option name="x" value="533" />
+    <option name="y" value="185" />
+    <option name="width" value="1252" />
+    <option name="height" value="690" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -104,6 +173,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -111,15 +181,24 @@
               <item name="Diskretne-strukture-3-algoritmi" type="b2602c69:ProjectViewProjectNode" />
               <item name="Diskretne-strukture-3-algoritmi" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="Diskretne-strukture-3-algoritmi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Diskretne-strukture-3-algoritmi" type="462c0819:PsiDirectoryNode" />
+              <item name="Dualni_Simpleks" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Diskretne-strukture-3-algoritmi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Diskretne-strukture-3-algoritmi" type="462c0819:PsiDirectoryNode" />
+              <item name="Dvofazni_Simpleks" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Application of projective geometry in computer sience" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -235,8 +314,8 @@
   <component name="ToolWindowManager">
     <frame x="0" y="36" width="1920" height="1044" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24986821" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49916527" visible="true" weight="0.24986821" />
+      <window_info id="Structure" order="1" sideWeight="0.5008347" side_tool="true" weight="0.24986821" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32896176" />
@@ -246,7 +325,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32896176" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" visible="true" weight="0.27759564" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.34535518" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.32896176" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -268,17 +347,82 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Revidirani Simpleks (eta matrice)/Revidirani_Simpleks_eta_matrice.py" />
+    <entry file="file://$PROJECT_DIR$/Revidirani Simpleks-eta matrice/Revidirani_Simpleks_eta_matrice.py" />
     <entry file="file://$PROJECT_DIR$/Revidirani Simpleks/Revidirani_Simpleks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="103">
-          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+        <state relative-caret-position="-1493">
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Revidirani Simpleks-eta matrice/Revidirani_Simpleks_eta_matrice.py">
+    <entry file="file://$PROJECT_DIR$/Dualni_Simpleks/Revidirani_Simpleks_eta_matrice.py" />
+    <entry file="file://$PROJECT_DIR$/Dvofazni_Simpleks/Revidirani_Simpleks_eta_matrice.py" />
+    <entry file="file://$USER_HOME$/PycharmProjects/Furije_Mockin_metod/venv/lib/python3.6/site-packages/numpy/lib/function_base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1520">
-          <caret line="80" selection-start-line="80" selection-end-line="80" />
+        <state relative-caret-position="211">
+          <caret line="4148" selection-start-line="4148" selection-end-line="4148" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dvofazni_Simpleks/Test7" />
+    <entry file="file://$PROJECT_DIR$/Dvofazni_Simpleks/Test1" />
+    <entry file="file://$PROJECT_DIR$/Dvofazni_Simpleks/Test2" />
+    <entry file="file://$PROJECT_DIR$/Dvofazni_Simpleks/Test6" />
+    <entry file="file://$PROJECT_DIR$/Dvofazni_Simpleks/Test4" />
+    <entry file="file://$PROJECT_DIR$/Dvofazni_Simpleks/Test5">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="4" column="10" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dvofazni_Simpleks/Test3">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="4" column="11" lean-forward="true" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dualni_Simpleks/Test4" />
+    <entry file="file://$PROJECT_DIR$/Dualni_Simpleks/Test2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="4" column="13" lean-forward="true" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dualni_Simpleks/Test3">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="3" column="10" lean-forward="true" selection-start-line="3" selection-start-column="10" selection-end-line="3" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dualni_Simpleks/Test1">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="3" column="11" lean-forward="true" selection-start-line="3" selection-start-column="11" selection-end-line="3" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dvofazni_Simpleks/Dvofazni_simpleks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="376">
+          <caret line="268" column="12" lean-forward="true" selection-start-line="263" selection-start-column="4" selection-end-line="268" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dualni_Simpleks/Dualni_simpleks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="53">
+          <caret line="249" column="16" lean-forward="true" selection-start-line="249" selection-start-column="16" selection-end-line="249" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <marker date="1541499661312" expanded="true" signature="3569:3647" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

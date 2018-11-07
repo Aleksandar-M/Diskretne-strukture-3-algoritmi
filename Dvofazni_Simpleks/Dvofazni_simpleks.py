@@ -19,6 +19,7 @@ class Sistem:
         self.Q = np.array([])
         self.x = np.array([])
 
+blend = "da"
 
 # Funkcija za unos
 def unesiUlaz(s):
@@ -53,6 +54,7 @@ def unesiUlaz(s):
             else:
                 s.matricaA[i][j] = koefs_nejednacine[j]
 
+    blend = input("Unesite da/ne za koriscenje Blendovog pravila")
     print("niz znakova", len(s.niz_znakova))
 
 
@@ -202,12 +204,18 @@ def tablicni_simpleks(s):
                         nova_vr = s.matricaB[i][0] / s.matricaA[i][k]
 
                         # Trenutni min
-                        #if min >= nova_vr:     # Bez koriscenje pravila
-                        if min > nova_vr:     # Koriscenjem Blendovog pravila
-                            min = nova_vr
-                            pivot_vrsta = i
-                            pivot_kolona = k
-                            pivot_vrednost = s.matricaA[i][k]
+                        if blend == "da":
+                            if min > nova_vr:     # Koriscenjem Blendovog pravila
+                                min = nova_vr
+                                pivot_vrsta = i
+                                pivot_kolona = k
+                                pivot_vrednost = s.matricaA[i][k]
+                        else:
+                            if min >= nova_vr:     # Bez koriscenja pravila
+                                min = nova_vr
+                                pivot_vrsta = i
+                                pivot_kolona = k
+                                pivot_vrednost = s.matricaA[i][k]
 
                 elem_transformacije(s, pivot_vrsta, pivot_kolona, pivot_vrednost)
                 break
@@ -233,10 +241,12 @@ def tablicni_simpleks(s):
                 if len(jedinice) == 1 and len(nule) == s.br_vrsta - 1:
                     opt_resenje[i] = s.matricaB[jedinice[0]]
 
+            print("\nKorisceno Blendovo pravilo:", blend)
+            
             if s.problem == "min":
-                print("\nmin f:", s.rez_funkcije[0]*(-1))
+                print("min f:", s.rez_funkcije[0]*(-1))
             else:
-                print("\nmax f:", s.rez_funkcije[0])
+                print("max f:", s.rez_funkcije[0])
 
             print("Optimalno resenje:\n", end="")
             for i in range(len(opt_resenje)):
