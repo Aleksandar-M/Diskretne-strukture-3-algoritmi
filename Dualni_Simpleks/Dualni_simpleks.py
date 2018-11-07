@@ -109,16 +109,39 @@ def pronadjiIndeks(koefs, s):
             return s.Q[i]
 
 
+def ispis(s2):
+
+    mat = s2.matricaA
+    mat2 = s2.matricaB
+
+    for i in range(len(mat)):
+        for j in range(len(mat[0])):
+            print('{: 3.2f}'.format(mat[i][j]), end=" ")
+        print('{: 3.2f}'.format(mat2[i][0]))
+
+    for i in range(len(s2.koefs_problema)):
+        print('{: 3.2f}'.format(s2.koefs_problema[i]), end=" ")
+    print(s2.rez_funkcije)
+
+    print("-----------------")
+
+
 # Pomocna funkcija za lep ispis matrice
-def ispisiMatricu(mat):
-    for vrsta in mat:
-        for kolona in vrsta:
-            if kolona >= 0:
-                print(" ", round(kolona, 3), sep="", end=" ")
-            else:
-                print(round(kolona, 3), end=" ")
-        print("")
-    print("")
+# def ispisiMatricu(mat, mat2):
+#
+#     for i in range(len(mat)):
+#         print(mat[i], mat2[i])
+#
+#
+#     # for vrsta in mat:
+#     #     for kolona in vrsta:
+#     #         if kolona >= 0:
+#     #             print(" ", round(kolona, 3), sep="", end=" ")
+#     #         else:
+#     #             print(round(kolona, 3), end=" ")
+#     #
+#     #     print("")
+#     # print("")
 
 
 def tablicni_simpleks(s):
@@ -161,6 +184,8 @@ def tablicni_simpleks(s):
                             pivot_kolona = i
                             pivot_vrednost = s.matricaA[k][i]
 
+                print("Pivot (vrsta, kolona, vrednost):", pivot_vrsta, pivot_kolona, pivot_vrednost)
+
                 # Obavljamo elementarne transformacije nad ostalim vrstama - vrsimo pivotiranje
                 for i in range(s.br_vrsta):
 
@@ -182,11 +207,7 @@ def tablicni_simpleks(s):
 
                 break
 
-        ispisiMatricu(s.matricaA)
-        print(s.koefs_problema)
-        ispisiMatricu(s.matricaB)
-        print("Trenutna vrednost funkcije:", s.rez_funkcije[0])
-
+        ispis(s)
 
         # Proveravamo da li su svi b-ovi nenegativni; ako T -> nasli smo optimalno resenje
         br_pozitivnih = 0
@@ -198,7 +219,7 @@ def tablicni_simpleks(s):
         # Ispisujemo optimalno i vrednost funkcije
         if br_pozitivnih == len(s.matricaB):
 
-            # pronalazenje optimalnog resenja
+            # Pronalazenje optimalnog resenja
             opt_resenje = np.zeros(s.br_kolona)
             for i in range(s.br_kolona):
 
@@ -212,7 +233,12 @@ def tablicni_simpleks(s):
                 print("\nmin f:", s.rez_funkcije[0]*(-1))
             else:
                 print("\nmax f:", s.rez_funkcije[0])
-            print("Optimalno resenje:\n", opt_resenje)
+
+            print("Optimalno resenje:\n", end="")
+            for i in range(len(opt_resenje)):
+                print('{: 3.2f}'.format(opt_resenje[i]), end=" ")
+            print("")
+
             return
 
         iteracija += 1
@@ -222,6 +248,12 @@ def main():
 
     s = Sistem()
     unesiUlaz(s)
+    print("Ulaz:\n", s.br_vrsta,
+          s.br_kolona,
+          s.rez_funkcije,
+          s.problem,
+          s.niz_znakova)
+    ispis(s)
 
     # Ako je bila nejednacina oblika >= hocemo <=
     for i in range(s.br_vrsta):
@@ -231,6 +263,13 @@ def main():
             s.niz_znakova[i] = "<="
 
     kanonskiOblik(s)
+    print("U kanonskom obliku:\n", s.br_vrsta,
+          s.br_kolona,
+          s.rez_funkcije,
+          s.problem,
+          s.niz_znakova)
+    ispis(s)
+
     tablicni_simpleks(s)
 
 
