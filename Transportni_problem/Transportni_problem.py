@@ -98,6 +98,55 @@ def metod_min_cena(mat_cena, mat_potencijala):
     ispis(mat_potencijala)
 
 
+def metod_potencijala(mat_cena, mat_potencijala):
+
+    max_bazisnih_vr = 0
+    max_bazisnih_kol = 0
+    vrsta_max = 0
+    kolona_max = 0
+
+    # Trazimo vrstu sa najvise bazisnih promenljivih
+    for i, linija in enumerate(mat_potencijala.mat_c):
+        br_bazisnih = np.size(np.where(linija != float('-inf'))[0])
+        if br_bazisnih > max_bazisnih_vr:
+            max_bazisnih_vr = br_bazisnih
+            vrsta_max = i
+
+    # Trazimo kolonu sa najvise bazisnih promenljivih
+    for j, kolona in enumerate(mat_potencijala.mat_c.T):
+        br_bazisnih = np.size(np.where(kolona != float('-inf'))[0])
+        if br_bazisnih > max_bazisnih_kol:
+            max_bazisnih_kol = br_bazisnih
+            kolona_max = j
+
+    # Za pocetnu biramo vrstu ili kolonu sa najvise bazisnih promenljivih
+    if max_bazisnih_vr >= max_bazisnih_kol:
+        mat_potencijala.mat_a[vrsta_max][0] = 0
+    else:
+        mat_potencijala.mat_b[kolona_max] = 0
+
+    # Racunamo dok sva polja iz B i A ne popunimo
+    while np.size(np.where(mat_potencijala.mat_b == float('-inf'))[0]) > 0 \
+            or np.size(np.where(mat_potencijala.mat_a == float('-inf'))[0]) > 0:
+
+        # Prolazimo vrste i gde je je uneta vrednost u A u toj vrsti trazimo bazisne i za njihove kolone
+        # zatim u B upisujemo rezultat cijB - Ai
+        for r, broj in enumerate(mat_potencijala.mat_a):
+            if broj != float('-inf'):
+
+                bazisne = np.where(mat_potencijala.mat_c[r] != float('-inf'))[0]
+                for m in bazisne:
+                    mat_potencijala.mat_b[m] = mat_cena.mat_c[r][m] - mat_potencijala.mat_a[r][0]
+
+        # Prolazimo kolone i radimo isto samo sto gledamo B,a upisujemo u A rezultat cijB - Bi
+        for r, broj in enumerate(mat_potencijala.mat_b):
+            if broj != float('-inf'):
+
+                nove_bazisne = np.where(mat_potencijala.mat_c[:, r] != float('-inf'))[0]
+                for m in nove_bazisne:
+                    mat_potencijala.mat_a[m][0] = mat_cena.mat_c[m][r] - mat_potencijala.mat_b[r]
+
+
 def main():
 
     mat_cena = Sistem()
@@ -119,9 +168,6 @@ def main():
                                    .reshape(mat_cena.br_vrsta, 1), axis=1)
         mat_cena.mat_b = np.append(mat_cena.mat_b, -razlika)
 
-    print("\n")
-    ispis(mat_cena)
-
     # Pravimo matricu potencijala, na pocetno (sve -inf)
     mat_potencijala = Sistem()
     mat_potencijala.br_vrsta = mat_cena.br_vrsta
@@ -133,10 +179,19 @@ def main():
     mat_potencijala.mat_a = np.repeat(float('-inf'), mat_potencijala.br_vrsta)\
         .reshape((mat_potencijala.br_vrsta, 1))
 
+    print("\n")
+    ispis(mat_cena)
     ispis(mat_potencijala)
 
     metod_min_cena(mat_cena, mat_potencijala)
-    #s.metod_potencijala()
+    print("Matrice nakon metoda minimalnih cena:\n")
+    ispis(mat_cena)
+    ispis(mat_potencijala)
+
+    metod_potencijala(mat_cena, mat_potencijala)
+    print("Matrice nakon metoda potencijala:\n")
+    ispis(mat_cena)
+    ispis(mat_potencijala)
 
 
 if __name__ == '__main__':
