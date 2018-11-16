@@ -23,6 +23,8 @@ blend = "da"
 
 # Funkcija za unos
 def unesiUlaz(s):
+
+    global blend
     funkcija = input("Unesite problem ( u obliku max ili min) i koeficijente funkcije:").split(" ")
 
     if funkcija[0] == "max" or funkcija[0] == "min":
@@ -147,16 +149,20 @@ def elem_transformacije(s2, pivot_vrsta, pivot_kolona, pivot_vrednost):
         s2.rez_funkcije = s2.rez_funkcije + (-1) * stara_pivot_kolona_c / pivot_vrednost * s2.matricaB[
             pivot_vrsta]
 
+        # Zaokruzivanje mnogo malih brojva blizu nule na 0
+        s2.matricaA[abs(s2.matricaA) < 0.00001] = 0
+        s2.matricaB[abs(s2.matricaB) < 0.00001] = 0
+        s2.koefs_problema[abs(s2.koefs_problema) < 0.00001] = 0
+        s2.rez_funkcije[abs(s2.rez_funkcije) < 0.00001] = 0
+
     # Delimo celu vrstu sa trenutnim pivotom
     if pivot_vrednost != 0:
         s2.matricaA[pivot_vrsta] = s2.matricaA[pivot_vrsta] / pivot_vrednost
         s2.matricaB[pivot_vrsta] = s2.matricaB[pivot_vrsta] / pivot_vrednost
 
-    # Zaokruzivanje mnogo malih brojva blizu nule na 0
-    s2.matricaA[abs(s2.matricaA) < 0.00001] = 0
-    s2.matricaB[abs(s2.matricaB) < 0.00001] = 0
-    s2.koefs_problema[abs(s2.koefs_problema) < 0.00001] = 0
-    s2.rez_funkcije[abs(s2.rez_funkcije) < 0.00001] = 0
+        s2.matricaA[abs(s2.matricaA) < 0.00001] = 0
+        s2.matricaB[abs(s2.matricaB) < 0.00001] = 0
+
 
 # Pomocna funkcija za transformisanje koeficijenata ispod bazisnih kolona
 def ciscenje_koefs_problema(s3):
