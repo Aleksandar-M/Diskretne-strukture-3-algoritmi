@@ -152,6 +152,11 @@ def elem_transformacije(s2, pivot_vrsta, pivot_kolona, pivot_vrednost):
         s2.matricaA[pivot_vrsta] = s2.matricaA[pivot_vrsta] / pivot_vrednost
         s2.matricaB[pivot_vrsta] = s2.matricaB[pivot_vrsta] / pivot_vrednost
 
+    # Zaokruzivanje mnogo malih brojva blizu nule na 0
+    s2.matricaA[abs(s2.matricaA) < 0.00001] = 0
+    s2.matricaB[abs(s2.matricaB) < 0.00001] = 0
+    s2.koefs_problema[abs(s2.koefs_problema) < 0.00001] = 0
+    s2.rez_funkcije[abs(s2.rez_funkcije) < 0.00001] = 0
 
 # Pomocna funkcija za transformisanje koeficijenata ispod bazisnih kolona
 def ciscenje_koefs_problema(s3):
@@ -171,11 +176,12 @@ def ciscenje_koefs_problema(s3):
 
         ispis(s3)
 
+
 def tablicni_simpleks(s):
 
     iteracija = 1
 
-    while iteracija < 100:
+    while iteracija < 300:
         print("Iteracija:", iteracija)
 
         for k in range(len(s.koefs_problema)):
@@ -310,6 +316,10 @@ def main():
 
         print("Pozivamo tablicni simplex u prvoj fazi:")
         tablicni_simpleks(s2)
+        
+        if s2.rez_funkcije[0] != 0:
+            print("\n Rezultat pomocnog problema:", s2.rez_funkcije[0] ,"!= 0 => pocetni problem nema dopustivih resenja. STOP")
+            exit()
 
         # Brisanje vestackih promenljivih
         pom = np.array([])
@@ -358,9 +368,6 @@ def main():
         s2.koefs_problema = np.delete(s2.koefs_problema, pom, axis=0)
         s2.br_kolona -= len(pom)
 
-        if s2.rez_funkcije != 0:
-            print("pomocni problem != 0, pocetni problem nije zadovoljiv. STOP")
-            exit()
 
         print("\n######################Druga faza:######################\n")
 
