@@ -7,9 +7,16 @@
       <change beforePath="$PROJECT_DIR$/../Dvofazni_Simpleks/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Dvofazni_Simpleks/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Gomorijev_rez/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Gomorijev_rez/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Gomorijev_rez/Gomorijev_rez.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Gomorijev_rez/Gomorijev_rez.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gomorijev_rez/Test1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gomorijev_rez/Test2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gomorijev_rez/Test3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gomorijev_rez/Test4" beforeDir="false" afterPath="$PROJECT_DIR$/../Gomorijev_rez/Test4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gomorijev_rez/Test5" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../Problem_ranca/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Problem_ranca/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Problem_ranca/Problem_ranca.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Problem_ranca/Problem_ranca.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test4" beforeDir="false" afterPath="$PROJECT_DIR$/Test4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test5" beforeDir="false" afterPath="$PROJECT_DIR$/Test5" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Transportni_problem.py" beforeDir="false" afterPath="$PROJECT_DIR$/Transportni_problem.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,13 +30,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Transportni_problem.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="141">
-              <caret line="203" lean-forward="true" selection-start-line="203" selection-end-line="203" />
+            <state relative-caret-position="507">
+              <caret line="226" lean-forward="true" selection-start-line="226" selection-end-line="226" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-                <marker date="1543424175869" expanded="true" signature="2262:3414" ph="..." />
-                <marker date="1543424175869" expanded="true" signature="3472:5969" ph="..." />
-                <marker date="1543424175869" expanded="true" signature="6018:10245" ph="..." />
+                <marker date="1544455440978" expanded="true" signature="2650:3801" ph="..." />
+                <marker date="1544455440978" expanded="true" signature="3859:6170" ph="..." />
+                <marker date="1544455440978" expanded="true" signature="6219:10019" ph="..." />
               </folding>
             </state>
           </provider>
@@ -40,6 +47,29 @@
           <provider selected="true" editor-type-id="text-editor">
             <state>
               <caret column="3" selection-start-column="3" selection-end-column="3" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Test5">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="76">
+              <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Test6">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Test7">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="152">
+              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
             </state>
           </provider>
         </entry>
@@ -81,22 +111,27 @@
       <find>float('-inf')</find>
       <find>redosled</find>
       <find>kandidati</find>
-      <find>pronadji_cikl</find>
       <find>nadji_teta_ciklus</find>
       <find>search</find>
       <find>graph</find>
       <find>graf</find>
       <find>pretraga</find>
       <find>rekonstruisi_cikl</find>
-      <find>print</find>
       <find>np.where</find>
       <find>50</find>
       <find>Iteracija</find>
       <find>Brisemo</find>
       <find>metod_rasporedjivanja</find>
-      <find>metod_potencijala</find>
       <find>exit</find>
       <find>ind_izrav_vr</find>
+      <find>Optimalno</find>
+      <find>print</find>
+      <find>metod_min_cena</find>
+      <find>br_vrsta</find>
+      <find>metod_potencijala</find>
+      <find>pronadji_cikl</find>
+      <find>%</find>
+      <find>razlika</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -111,16 +146,17 @@
         <option value="$PROJECT_DIR$/Mladen" />
         <option value="$PROJECT_DIR$/Mladen.py" />
         <option value="$PROJECT_DIR$/Test4" />
-        <option value="$PROJECT_DIR$/Transportni_problem.py" />
         <option value="$PROJECT_DIR$/Test6" />
+        <option value="$PROJECT_DIR$/ttt" />
+        <option value="$PROJECT_DIR$/Transportni_problem.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="549" />
     <option name="y" value="185" />
-    <option name="width" value="1222" />
-    <option name="height" value="687" />
+    <option name="width" value="1212" />
+    <option name="height" value="686" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
@@ -130,6 +166,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -141,11 +178,10 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Problem_ranca" />
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
   </component>
   <component name="RunDashboard">
@@ -177,7 +213,7 @@
     <frame x="0" y="36" width="1920" height="1044" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21718504" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21718504" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -188,7 +224,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" visible="true" weight="0.3569869" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.279476" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.3286026" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -200,6 +236,13 @@
     <entry file="file://$PROJECT_DIR$/Mladen" />
     <entry file="file://$PROJECT_DIR$/Mladen.py" />
     <entry file="file://$PROJECT_DIR$/Test3" />
+    <entry file="file://$PROJECT_DIR$/Test4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="3" selection-start-column="3" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Test2">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
@@ -214,29 +257,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Test4">
+    <entry file="file://$PROJECT_DIR$/Test5">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="3" selection-start-column="3" selection-end-column="3" />
+        <state relative-caret-position="76">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Test6">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ttt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
+          <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Test7">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Transportni_problem.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="203" lean-forward="true" selection-start-line="203" selection-end-line="203" />
+        <state relative-caret-position="507">
+          <caret line="226" lean-forward="true" selection-start-line="226" selection-end-line="226" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1543424175869" expanded="true" signature="2262:3414" ph="..." />
-            <marker date="1543424175869" expanded="true" signature="3472:5969" ph="..." />
-            <marker date="1543424175869" expanded="true" signature="6018:10245" ph="..." />
+            <marker date="1544455440978" expanded="true" signature="2650:3801" ph="..." />
+            <marker date="1544455440978" expanded="true" signature="3859:6170" ph="..." />
+            <marker date="1544455440978" expanded="true" signature="6219:10019" ph="..." />
           </folding>
         </state>
       </provider>

@@ -21,16 +21,21 @@ class Sistem:
 
 ind_izrav_vr, ind_izrav_kol = 0, 0
 iter = 1
-
+vrste, kolone = 0, 0
 
 # Funkcija za unos
 def unesiUlaz(s):
+
+    global vrste, kolone
 
     ulaz = input("Unesite broj vrsta i kolona za C:").split(" ")
 
     s.br_vrsta = int(ulaz[0])
     s.br_kolona = int(ulaz[1])
     s.mat_c = np.zeros((s.br_vrsta, s.br_kolona))
+
+    vrste = s.br_vrsta
+    kolone = s.br_kolona
 
     for i in range(s.br_vrsta):
         s.mat_c[i] = input("Unesite vrednosti vrste za C:").split(" ")
@@ -63,9 +68,11 @@ def ispis(s2):
 def metod_min_cena(mat_cena, mat_potencijala):
 
     pom_mat = copy.copy(mat_cena.mat_c)
+    izb_vr = 0
+    izb_kol = 0
 
     # Biramo min iz matrice C i azuriramo vrednosti b i a u koloni/vrsti tog minimuma
-    while len(np.where(mat_cena.mat_a != 0)[0]) != 0 and len(np.where(mat_cena.mat_c != 0)[0]) != 0:
+    while len(np.where(pom_mat != 10000)[0]) > 0:
 
         # Uzimamo prvi minimum ako ih ima vise
         minimumi = np.where(pom_mat == np.min(pom_mat))
@@ -75,16 +82,24 @@ def metod_min_cena(mat_cena, mat_potencijala):
 
         mat_potencijala.mat_c[min_vr][min_kol] = poten
 
-        if poten == mat_cena.mat_b[min_kol]:
+        brisi_kol = 0
+        if mat_cena.mat_b[min_kol] == mat_cena.mat_a[min_vr][0]:
+            if izb_kol <= izb_vr:
+                brisi_kol = 1
+
+        if (poten == mat_cena.mat_b[min_kol] and poten != mat_cena.mat_a[min_vr][0]) or \
+                (poten == mat_cena.mat_b[min_kol] and brisi_kol):
 
             mat_cena.mat_b[min_kol] = 0
             mat_cena.mat_a[min_vr][0] -= poten
             pom_mat[:, min_kol] = 10000
+            izb_kol += 1
         else:
 
             mat_cena.mat_a[min_vr][0] = 0
             mat_cena.mat_b[min_kol] -= poten
             pom_mat[min_vr, :] = 10000
+            izb_vr += 1
 
 
 def napravi_listu_povezanosti(pom):
@@ -142,13 +157,8 @@ def pronadji_cikl(najneg_vr, najneg_kol, mat_potencijala):
 
             for i in bazisne_vr:
 
-                baz = np.where((mat_potencijala.mat_c[i] != float('-inf')) & (mat_potencijala.mat_c[i] != 0))[0]
-                print(baz)
-
+                baz = np.where(mat_potencijala.mat_c[i] != float('-inf'))[0]
                 for j in baz:
-
-                    if len(np.where(baz == najneg_kol)[0]) and obelezen > 3:
-                        break
 
                     if pom[i][j] == 0:
                         pom[i][j] = obelezen + 1
@@ -162,9 +172,6 @@ def pronadji_cikl(najneg_vr, najneg_kol, mat_potencijala):
 
             for j in bazisne_kol:
                 baz = np.where(mat_potencijala.mat_c[:, j] != float('-inf'))[0]
-
-                if len(np.where(baz == najneg_vr)[0]) and obelezen > 3:
-                    break
 
                 for t in baz:
                     if pom[t][j] == 0:
@@ -184,7 +191,6 @@ def pronadji_cikl(najneg_vr, najneg_kol, mat_potencijala):
                 cilj = i
 
     pozicije = pretraga(lista_pov, start, cilj)
-    print("Najkraci put:", pozicije)
 
     znak = -1
     teta = np.zeros((pom.shape[0], pom.shape[1]))
@@ -200,19 +206,21 @@ def pronadji_cikl(najneg_vr, najneg_kol, mat_potencijala):
 
     # Trazimo minimalno teta
     pot_min = np.array([])
+    pot_indeksi = np.array([])
     vrste, kolone = np.where(teta == -1)
 
     for i, j in zip(vrste, kolone):
         pot_min = np.append(pot_min, mat_potencijala.mat_c[i][j])
+        pot_indeksi = np.append(pot_indeksi, i * 10 + j)
 
     teta_vr = min(pot_min)
     print("Teta min:", teta_vr)
+    indeks = np.where(pot_min == teta_vr)[0][0]
 
     mat_potencijala.mat_c = mat_potencijala.mat_c + teta * teta_vr
-
-    for i, j in zip(vrste, kolone):
-        if mat_potencijala.mat_c[i][j] == 0:
-            mat_potencijala.mat_c[i][j] = float('-inf')
+    v = int(pot_indeksi[indeks] / 10)
+    k = int(pot_indeksi[indeks] % 10)
+    mat_potencijala.mat_c[v][k] = float('-inf')
 
     print("Nova matrica potencijala:\n", mat_potencijala.mat_c)
     return mat_potencijala.mat_c
@@ -272,9 +280,6 @@ def metod_potencijala(mat_cena, mat_potencijala):
                 for m in nove_bazisne:
                     mat_potencijala.mat_a[m][0] = mat_cena.mat_c[m][r] - mat_potencijala.mat_b[r]
 
-        print("pom ispissssss")
-        ispis(mat_potencijala)
-
     print("Matrice nakon popunjavanja B, A:\n")
     ispis(mat_cena)
     ispis(mat_potencijala)
@@ -290,27 +295,23 @@ def metod_potencijala(mat_cena, mat_potencijala):
         for j, vr_c in enumerate(vrsta):
 
             raz = mat_cena.mat_c[i][j] - (mat_potencijala.mat_b[j] + mat_potencijala.mat_a[i][0])
-            #if vr_c == 0 and raz < 0:
             if vr_c == float('-inf') and raz < 0:
 
-                print("usao", vr_c, raz, mat_cena.mat_c[i][j], mat_potencijala.mat_b[j], mat_potencijala.mat_a[i][0])
                 indikator = 1
                 if raz < tren_najneg:
-
                     najneg_vr = i
                     najneg_kol = j
                     najnegativniji = mat_cena.mat_c[i][j]
                     tren_najneg = raz
 
+
     # Racunamo optimalno resenje
     if indikator == 0:
-        print(ind_izrav_vr, ind_izrav_kol)
+
         # Brisemo izravnavajucu vrst/kolonu ako je dodata
         if ind_izrav_vr > 0:
-            #mat_potencijala.mat_c = np.delete(mat_potencijala.mat_c, -1, axis=0)
             mat_potencijala.mat_c = mat_potencijala.mat_c[:-ind_izrav_vr, :]
         elif ind_izrav_kol > 0:
-            #mat_potencijala.mat_c = np.delete(mat_potencijala.mat_c, -1, axis=1)
             mat_potencijala.mat_c = mat_potencijala.mat_c[:, :-ind_izrav_kol]
 
         konacna_suma = 0
@@ -353,7 +354,6 @@ def main():
 
             ind_izrav_kol = abs(razlika)
             mat_cena.br_kolona += abs(razlika)
-            print(ind_izrav_kol)
             for i in range(ind_izrav_kol):
                 mat_cena.mat_c = np.append(mat_cena.mat_c, np.repeat(500, mat_cena.br_vrsta)
                                            .reshape(mat_cena.br_vrsta, 1), axis=1)
@@ -365,7 +365,6 @@ def main():
             ind_izrav_vr = 1
             mat_cena.br_vrsta += 1
             mat_cena.mat_c = np.append(mat_cena.mat_c, [np.repeat(500, mat_cena.br_kolona)], axis=0)
-            print(mat_cena.mat_a, razlika)
             mat_cena.mat_a = np.append(mat_cena.mat_a, [[razlika]], axis=0)
 
         elif razlika < 0:
@@ -396,10 +395,6 @@ def main():
     ispis(mat_cena)
     ispis(mat_potencijala)
 
-    #br_bazisnih = len(np.where(mat_potencijala.mat_c != 0)[0])
-    # if br_bazisnih != mat_cena.br_vrsta + mat_cena.br_kolona - 1:
-    #     metod_rasporedjivanja(mat_cena, mat_potencijala)
-    # else:
     metod_potencijala(mat_cena, mat_potencijala)
 
 
