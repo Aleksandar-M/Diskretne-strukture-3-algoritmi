@@ -298,6 +298,12 @@ def main():
         s2 = copy.deepcopy(s)
         s2.koefs_problema = np.zeros((len(s.koefs_problema)))
 
+        # Ako je neko b < 0 mnozimo celu vrstu sa -1
+        for p, l in enumerate(s2.matricaB):
+            if l[0] < 0:
+                s2.matricaA[p][s2.matricaA[p] != 0] *= -1
+                s2.matricaB[p][0] *= -1
+
         for i in range(len(jedn_ili_vece)):
             if jedn_ili_vece[i] == ">=" or jedn_ili_vece[i] == "=":
 
