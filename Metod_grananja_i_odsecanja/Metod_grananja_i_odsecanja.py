@@ -100,7 +100,7 @@ class Sistem:
 
         self.br_vrsta = 0
         self.br_kolona = 0
-        self.rez_funkcije = 0  # rezultat funkcije!
+        self.rez_funkcije = np.array([0])  # rezultat funkcije!
         self.problem = ""
         self.koefs_problema = np.array([])
         self.niz_znakova = np.array([])
@@ -367,7 +367,7 @@ def tablicni_simpleks(s):
             for i in range(len(opt_resenje)):
                 print('{: 3.3f}'.format(opt_resenje[i]), end=" ")
             print("")
-            return
+            return s
 
         iteracija += 1
 
@@ -391,7 +391,9 @@ def dualni_simpleks(s):
 
                 if br_poz == s.br_kolona:
                     print("Neogranicen problem")
-                    exit()
+                    s.rez_funkcije[0] = float('-inf')
+                    return
+                    #exit()
 
                 # Trazimo pivot
                 max = -100
@@ -475,7 +477,9 @@ def dualni_simpleks(s):
             # Ako je neko od resenja negativno
             if np.size(np.where(opt_resenje[:s.baz_prom] < 0)[0]) > 0:
                 print("Nema dopustivih tacaka", opt_resenje[:s.baz_prom])
-                exit()
+                s.rez_funkcije[0] = float('-inf')
+                return
+                #exit()
 
             if s.problem == "min":
                 print("min f:", s.rez_funkcije[0] * (-1))
@@ -486,7 +490,7 @@ def dualni_simpleks(s):
             for i in range(len(opt_resenje)):
                 print('{: 3.3f}'.format(opt_resenje[i]), end=" ")
             print("")
-            return
+            return s
 
         iteracija += 1
 
@@ -572,76 +576,20 @@ def bazisne_celobrojne(s3):
     return True, -1, -1
 
 
-def gomorijev_rez(s3):
-
-    ostaci = np.zeros(s3.br_kolona)
-    ostatak_rez = 0
-
-    # Ako rezultat fje nije ceo broj racunamo decimalne delove
-    if s3.rez_funkcije % 1 != 0:
-
-        for i, vr in enumerate(s3.koefs_problema):
-            ostaci[i] = vr - math.floor(vr)
-        ostatak_rez = s3.rez_funkcije - math.floor(s3.rez_funkcije)
-
-    # Ako postoje x-evi koji nisu celobrojni, trazimo maksimalni decimalni deo pa po toj vrsti pravimo rez
-    else:
-        sve_jed = np.zeros(s3.baz_prom)
-        razlomljeni = np.zeros(s3.baz_prom)
-        for t in range(s3.baz_prom):
-
-            jedinice = np.where(s3.matricaA[:, t] == 1)[0]
-            nule = np.where(s3.matricaA[:, t] == 0)[0]
-            if len(jedinice) == 1 and len(nule) == s3.br_vrsta - 1:
-                razlomljeni[t] = s3.matricaB[jedinice[0]]
-                sve_jed[t] = jedinice
-
-        novi_ostaci = [r - math.floor(r) for r in razlomljeni]
-        maks_ostatak = max(novi_ostaci)
-        indeks = np.where(novi_ostaci == maks_ostatak)[0]
-        indeks_maksa = int(sve_jed[indeks][0])
-
-        for j, vr2 in enumerate(s3.matricaA[indeks_maksa]):
-            ostaci[j] = abs(vr2) - math.floor(abs(vr2))
-            if vr2 < 0:
-                ostaci[j] *= -1
-
-        ostatak_rez = np.array([maks_ostatak])
-
-    ostaci = np.append(ostaci, -1)
-    for i, vr in enumerate(ostaci):
-        if vr != 0:
-            ostaci[i] *= -1
-
-    if ostatak_rez != 0:
-        ostatak_rez *= -1
-
-    # Dodajemo novu jednacinu u trenutnu simpleks tablicu
-    s3.matricaA = np.append(s3.matricaA, np.zeros((s3.br_vrsta, 1)), axis=1)
-    s3.matricaA = np.append(s3.matricaA, [ostaci], axis=0)
-    s3.matricaB = np.append(s3.matricaB, [ostatak_rez], axis=0)
-    s3.koefs_problema = np.append(s3.koefs_problema, 0)
-    s3.br_vrsta += 1
-    s3.br_kolona += 1
-
-    # Ako je decimalni deo manji od 0.01 zaokruzujemo na ceo broj
-    zaokruzi(s3)
-
-    return s3
-
-
 def odg_simpleks(s, jedn_ili_vece):
-
-    # Pozivamo odgovarajuci Simpleks
+    ispis(s)
+    #Pozivamo odgovarajuci Simpleks
     if negativni_b(s) and postoji_baza(s):
 
         print("B ima negativnih pozivamo dualni simpleks\n")
-        dualni_simpleks(s)
+        s = dualni_simpleks(s)
+        return s
 
     elif negativni_c(s) and postoji_baza(s):
 
         print("C ima negativnih pozivamo tablicni simpleks\n")
-        tablicni_simpleks(s)
+        s = tablicni_simpleks(s)
+        return s
 
     else:  # nema pocetne baze
         s = dvofazni_simpleks(s, jedn_ili_vece)
@@ -785,10 +733,14 @@ def main():
           s.niz_znakova)
     ispis(s)
 
-    odg_simpleks(s, jedn_ili_vece)
+    s = odg_simpleks(s, jedn_ili_vece)
 
     koren = Cvor(s)
     baz_cel = bazisne_celobrojne(s)
+    if baz_cel[0]:
+        print("Koren vec ima celobrojna resenja")
+        exit()
+
     a, b = koren.dodaj_levo_desno(baz_cel[1], baz_cel[2][0])
 
     M = float('+inf')
@@ -804,12 +756,12 @@ def main():
         print(b_a, b_b)
 
         # Ako imamo celobrojno resenje proveravamo da li je bolje od rekorda
-        if b_a is not None and b_a[0] and int(a.rez) < M:
-            M = int(a.rez)
+        if b_a is not None and b_a[0] and round(a.rez, 1) < M:
+            M = round(a.rez, 1)
             opt = a.optimalno
 
-        if b_b is not None and b_b[0] and int(b.rez) < M:
-            M = int(b.rez)
+        if b_b is not None and b_b[0] and round(b.rez, 1) < M:
+            M = round(b.rez, 1)
             opt = b.optimalno
         print("Rekord:", M, opt)
 

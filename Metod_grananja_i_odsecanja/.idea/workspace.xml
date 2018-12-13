@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0eb35042-2f91-4a22-8c16-458e182d7b6b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Test2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Dualni_Simpleks/Test2" beforeDir="false" afterPath="$PROJECT_DIR$/../Dualni_Simpleks/Test2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Dvofazni_Simpleks/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Dvofazni_Simpleks/.idea/workspace.xml" afterDir="false" />
@@ -30,8 +29,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Metod_grananja_i_odsecanja.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="532">
-              <caret line="70" column="26" lean-forward="true" selection-start-line="70" selection-start-column="26" selection-end-line="70" selection-end-column="26" />
+            <state relative-caret-position="500">
+              <caret line="490" column="65" lean-forward="true" selection-start-line="490" selection-start-column="65" selection-end-line="490" selection-end-column="65" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -62,19 +61,21 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>copy</find>
-      <find>zaokruzi</find>
       <find>pivot</find>
       <find>ispis</find>
       <find>s2.rez_funkcije</find>
       <find>ciscenje_koefs_problema</find>
       <find>Optimalno</find>
       <find>dodaj_levo_desno</find>
-      <find>tablicni</find>
-      <find>odg_simpleks</find>
-      <find>dualni_simpleks</find>
-      <find>tablicni_simpleks</find>
       <find>bazisne_celobrojne</find>
       <find>dvofazni_simpleks</find>
+      <find>unesiUlaz</find>
+      <find>zaokruzi</find>
+      <find>tablicni</find>
+      <find>dualni</find>
+      <find>odg_simpleks</find>
+      <find>tablicni_simpleks</find>
+      <find>dualni_simpleks</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -115,7 +116,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Dvofazni_Simpleks" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Gomorijev_rez" />
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
   </component>
   <component name="RunDashboard">
@@ -183,8 +184,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Metod_grananja_i_odsecanja.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="532">
-          <caret line="70" column="26" lean-forward="true" selection-start-line="70" selection-start-column="26" selection-end-line="70" selection-end-column="26" />
+        <state relative-caret-position="500">
+          <caret line="490" column="65" lean-forward="true" selection-start-line="490" selection-start-column="65" selection-end-line="490" selection-end-column="65" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
