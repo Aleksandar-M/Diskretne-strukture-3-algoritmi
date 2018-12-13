@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0eb35042-2f91-4a22-8c16-458e182d7b6b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Test2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Dualni_Simpleks/Test2" beforeDir="false" afterPath="$PROJECT_DIR$/../Dualni_Simpleks/Test2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Dvofazni_Simpleks/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Dvofazni_Simpleks/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Dvofazni_Simpleks/Dvofazni_simpleks.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Dvofazni_Simpleks/Dvofazni_simpleks.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Gomorijev_rez/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Gomorijev_rez/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Gomorijev_rez/Gomorijev_rez.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Gomorijev_rez/Gomorijev_rez.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Gomorijev_rez/Test1" beforeDir="false" afterPath="$PROJECT_DIR$/../Gomorijev_rez/Test1" afterDir="false" />
@@ -12,6 +14,8 @@
       <change beforePath="$PROJECT_DIR$/../Gomorijev_rez/Test3" beforeDir="false" afterPath="$PROJECT_DIR$/../Gomorijev_rez/Test3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Gomorijev_rez/Test4" beforeDir="false" afterPath="$PROJECT_DIR$/../Gomorijev_rez/Test4" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Gomorijev_rez/Test5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Metod_grananja_i_odsecanja.py" beforeDir="false" afterPath="$PROJECT_DIR$/Metod_grananja_i_odsecanja.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Problem_ranca/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Problem_ranca/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Problem_ranca/Problem_ranca.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Problem_ranca/Problem_ranca.py" afterDir="false" />
     </list>
@@ -26,11 +30,20 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Metod_grananja_i_odsecanja.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="66" lean-forward="true" selection-start-line="66" selection-end-line="66" />
+            <state relative-caret-position="532">
+              <caret line="70" column="26" lean-forward="true" selection-start-line="70" selection-start-column="26" selection-end-line="70" selection-end-column="26" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Test2">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="95">
+              <caret line="5" column="2" lean-forward="true" selection-start-line="5" selection-start-column="2" selection-end-line="5" selection-end-column="2" />
             </state>
           </provider>
         </entry>
@@ -56,11 +69,11 @@
       <find>ciscenje_koefs_problema</find>
       <find>Optimalno</find>
       <find>dodaj_levo_desno</find>
-      <find>bazisne_celobrojne</find>
       <find>tablicni</find>
       <find>odg_simpleks</find>
-      <find>tablicni_simpleks</find>
       <find>dualni_simpleks</find>
+      <find>tablicni_simpleks</find>
+      <find>bazisne_celobrojne</find>
       <find>dvofazni_simpleks</find>
     </findStrings>
   </component>
@@ -70,6 +83,7 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/Test2" />
         <option value="$PROJECT_DIR$/Metod_grananja_i_odsecanja.py" />
       </list>
     </option>
@@ -153,6 +167,13 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Test2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="2" lean-forward="true" selection-start-line="5" selection-start-column="2" selection-end-line="5" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Test1">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
@@ -162,8 +183,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Metod_grananja_i_odsecanja.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="66" lean-forward="true" selection-start-line="66" selection-end-line="66" />
+        <state relative-caret-position="532">
+          <caret line="70" column="26" lean-forward="true" selection-start-line="70" selection-start-column="26" selection-end-line="70" selection-end-column="26" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

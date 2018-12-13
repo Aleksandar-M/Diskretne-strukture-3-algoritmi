@@ -7,11 +7,30 @@ import math
 class Cvor:
 
     def __init__(self, s):
+
         self.tabela = copy.deepcopy(s)  # Klasa sistem
         self.levo = None
         self.desno = None
+        self.rez = self.tabela.rez_funkcije[0] * (-1) if self.tabela.problem == "min" else self.tabela.rez_funkcije[0]
+        self.optimalno = self.nadji_opt()
+
+    def nadji_opt(self):
+
+        tab = self.tabela
+        opt_resenje = np.zeros(tab.br_kolona)
+
+        for i in range(tab.br_kolona):
+
+            jedinice = np.where(tab.matricaA[:, i] == 1)[0]
+            nule = np.where(tab.matricaA[:, i] == 0)[0]
+
+            if len(jedinice) == 1 and len(nule) == tab.br_vrsta - 1:
+                opt_resenje[i] = tab.matricaB[jedinice[0]]
+
+        return opt_resenje[:gl_kolone]
 
     def dodaj_levo_desno(self, indeks, vr):
+
         l = math.floor(vr)
         d = l + 1
         print("vrednosti po kojim granamo l i d:", l, d)
@@ -57,20 +76,28 @@ class Cvor:
         print("desni kraj")
         ispis(tab_d)
 
-        self.levo = Cvor(tab_l)
-        self.desno = Cvor(tab_d)
+        baz_cel_l, baz_cel_d = None, None
 
-        baz_cel_l = bazisne_celobrojne(self.levo.tabela)
-        baz_cel_d = bazisne_celobrojne(self.desno.tabela)
+        if tab_l is not None:
+            self.levo = Cvor(tab_l)
+            baz_cel_l = bazisne_celobrojne(self.levo.tabela)
+        else:
+            self.levo = None
+
+        if tab_d is not None:
+            self.desno = Cvor(tab_d)
+            baz_cel_d = bazisne_celobrojne(self.desno.tabela)
+        else:
+            self.desno = None
+
         print("bazisne celobrojne:", baz_cel_l, baz_cel_d)
-
-
-
+        return self.levo, self.desno
 
 
 class Sistem:
 
     def __init__(self):
+
         self.br_vrsta = 0
         self.br_kolona = 0
         self.rez_funkcije = 0  # rezultat funkcije!
@@ -86,11 +113,12 @@ class Sistem:
         self.baz_prom = 0
 
 blend = "da"
-
+gl_vrste = 0
+gl_kolone = 0
 
 # Funkcija za unos
 def unesiUlaz(s):
-    global blend
+    global blend, gl_vrste, gl_kolone
     funkcija = input("Unesite problem ( u obliku max ili min) i koeficijente funkcije:").split(" ")
 
     if funkcija[0] == "max" or funkcija[0] == "min":
@@ -105,6 +133,8 @@ def unesiUlaz(s):
 
     s.br_vrsta = int(ulaz.split(" ")[0])
     s.br_kolona = int(ulaz.split(" ")[1])
+    gl_vrste = s.br_vrsta
+    gl_kolone = s.br_kolona
 
     s.baz_prom = int(ulaz.split(" ")[1])
 
@@ -183,6 +213,11 @@ def pronadjiIndeks(koefs, s):
 
 
 def ispis(s2):
+
+    if s2 == None:
+        print("Nemoguc ispis, nepostojeca matrica")
+        return
+
     mat = s2.matricaA
     mat2 = s2.matricaB
 
@@ -264,7 +299,7 @@ def tablicni_simpleks(s):
 
                 if br_negativnih == s.br_vrsta:
                     print("Neogranicen problem")
-                    s.rez_funkcije[0] = float('+inf')
+                    s.rez_funkcije[0] = float('-inf')
                     return
                     #exit()
 
@@ -319,7 +354,9 @@ def tablicni_simpleks(s):
 
             if np.size(np.where(opt_resenje[:s.baz_prom] < 0)[0]) > 0:
                 print("Nema dopustivih tacaka", opt_resenje[:s.baz_prom])
-                exit()
+                s.rez_funkcije[0] = float('-inf')
+                return
+                #exit()
 
             if s.problem == "min":
                 print("min f:", s.rez_funkcije[0] * (-1))
@@ -532,7 +569,7 @@ def bazisne_celobrojne(s3):
         if s3.matricaB[int(i)] % 1 != 0:
             return False, k, s3.matricaB[int(i)]
 
-    return True
+    return True, -1, -1
 
 
 def gomorijev_rez(s3):
@@ -653,13 +690,15 @@ def dvofazni_simpleks(s, jedn_ili_vece):
     if s2.rez_funkcije[0] != 0:
         print("\n Rezultat pomocnog problema:", s2.rez_funkcije[0],
               "!= 0 => pocetni problem nema dopustivih resenja. STOP")
-        exit()
+        s2.rez_funkcije[0] = float('-inf')
+        return
+        #exit()
 
     # Brisanje vestackih promenljivih
     pom = np.array([])
     for i in vestacke:
-        if len(np.where(s2.matricaA[:, i] == 1)[0]) != 1 or \
-                len(np.where(s2.matricaA[:, i] == 0)[0]) != s2.br_vrsta - 1:
+        if (len(np.where(s2.matricaA[:, i] == 1)[0]) != 1 or \
+                len(np.where(s2.matricaA[:, i] == 0)[0]) != s2.br_vrsta - 1) or s2.koefs_problema[i] != 0:
             s2.matricaA[:, i] = np.zeros(s2.br_vrsta)
             s2.koefs_problema[i] = 0
             pom = np.append(pom, i)
@@ -748,26 +787,62 @@ def main():
 
     odg_simpleks(s, jedn_ili_vece)
 
-    baz_cel = bazisne_celobrojne(s)
-
     koren = Cvor(s)
     baz_cel = bazisne_celobrojne(s)
-    print(baz_cel)
-    koren.dodaj_levo_desno(baz_cel[1], baz_cel[2][0])
+    a, b = koren.dodaj_levo_desno(baz_cel[1], baz_cel[2][0])
 
+    M = float('+inf')
+    opt = None
 
-    exit()
+    while 1:
 
-    # Ako koren ima necelobrojna resenja
-    if not baz_cel[0]:
+        b_a, b_b = None, None
+        if a is not None:
+            b_a = bazisne_celobrojne(a.tabela)
+        if b is not None:
+            b_b = bazisne_celobrojne(b.tabela)
+        print(b_a, b_b)
 
-        exit()
+        # Ako imamo celobrojno resenje proveravamo da li je bolje od rekorda
+        if b_a is not None and b_a[0] and int(a.rez) < M:
+            M = int(a.rez)
+            opt = a.optimalno
 
-        gomorijev_rez(s)
-        ispis(s)
-        dualni_simpleks(s)
-        baz_cel = bazisne_celobrojne(s)
-        iteracija += 1
+        if b_b is not None and b_b[0] and int(b.rez) < M:
+            M = int(b.rez)
+            opt = b.optimalno
+        print("Rekord:", M, opt)
+
+        print("Tekuci uslovi:", b_a, b_b)
+        if b_a is None:
+            if b_b is None or b_b[0]:
+                exit()
+            else:
+                a, b = b.dodaj_levo_desno(b_b[1], b_b[2][0])
+
+        elif b_b is None:
+            if b_a is None or b_a[0]:
+                exit()
+            else:
+                a, b = a.dodaj_levo_desno(b_a[1], b_a[2][0])
+
+        elif b_a[0] and b_b[0]:
+            exit()
+
+        elif not b_a[0] and not b_b[0]:
+            if a.rez < b.rez:
+                a, b = a.dodaj_levo_desno(b_a[1], b_a[2][0])
+            else:
+                a, b = b.dodaj_levo_desno(b_b[1], b_b[2][0])
+
+        elif b_a[0] and not b_b[0]:
+            a, b = b.dodaj_levo_desno(b_b[1], b_b[2][0])
+
+        elif not b_a[0] and b_b[0]:
+            a, b = a.dodaj_levo_desno(b_a[1], b_a[2][0])
+
+        else:
+            exit()
 
 
 if __name__ == '__main__':
