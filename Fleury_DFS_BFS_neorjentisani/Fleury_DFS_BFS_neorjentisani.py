@@ -4,8 +4,8 @@ import sys
 
 class Graf:
 
-    def __init__(self, cvorovi):
-        self.V = cvorovi
+    def __init__(self, br_cvorova):
+        self.V = br_cvorova
         self.graf = defaultdict(list)
 
     def dodaj_granu(self, u, v):
@@ -63,6 +63,74 @@ class Graf:
             else:
                 Q.pop(0)
 
+    def prebroj(self, c, posecen):
+
+        posecen[c] = True
+        brojac = 1
+
+        for i in self.graf[c]:
+            if not posecen[i]:
+                brojac = brojac + self.prebroj(i, posecen)
+
+        return brojac
+
+    def obrisi_granu(self, u, v):
+
+        for ind, vr in enumerate(self.graf[u]):
+            if vr == v:
+                self.graf[u].pop(ind)
+
+        for ind, vr in enumerate(self.graf[v]):
+            if vr == u:
+                self.graf[v].pop(ind)
+
+    def validna_grana(self, u, v):
+
+        if len(self.graf[u]) == 1:
+            return True
+        else:
+
+            posecen = [False] * int(self.V)
+            br1 = self.prebroj(u, posecen)
+
+            self.obrisi_granu(u, v)
+
+            posecen = [False] * int(self.V)
+            br2 = self.prebroj(u, posecen)
+
+            self.dodaj_granu(u, v)
+
+            if br1 > br2:
+                return False
+            else:
+                return True
+
+    def ispisi_od_u(self, u):
+
+        for v in self.graf[u]:
+            if self.validna_grana(u, v):
+                print(u, "-", v)
+                self.obrisi_granu(u, v)
+                self.ispisi_od_u(v)
+
+    def ispisi_ojlerov_put(self):
+
+        br_neparnih = 0
+        for c in range(int(self.V)):
+            if len(self.graf[c]) % 2 != 0:
+                br_neparnih += 1
+
+        if br_neparnih > 2 or br_neparnih == 1:
+            print("Ne postoji Ojlerov put/cikl, broj neparnih cvorova:", br_neparnih)
+            exit()
+
+        u = 0
+        for i in range(int(self.V)):
+            if len(self.graf[i]) % 2 != 0:
+                u = i
+                break
+        self.ispisi_od_u(u)
+
 
 def ispis(Q, posecen, p, l, t):
 
@@ -100,12 +168,14 @@ def unesi_graf():
 
 def main():
 
+    start = 0
     g = unesi_graf()
     print("\n############# BFS #############")
-    g.BFS_neorj(0)
+    g.BFS_neorj(start)
     print("############# DFS #############")
-    g.DFS_neorj(0)
-    print("\n")
+    g.DFS_neorj(start)
+    print("\n############# Fleury-ev algoritam #############")
+    g.ispisi_ojlerov_put()
 
 
 if __name__ == '__main__':
