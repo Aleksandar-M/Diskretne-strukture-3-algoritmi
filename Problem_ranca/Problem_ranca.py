@@ -61,7 +61,6 @@ def nadji_optimalno(niz, dubina, s, k, opt):
     else:
         ind1 = np.where(niz == max(niz))[0]
         opt = np.append(opt, ind1)   # dodajemo u optimalno
-        print(s.global_rez, niz)
         ind3 = np.where(np.prod(s.global_rez == niz, axis=-1))[0]
         ind2 = np.where(dubina == k)[0]
         print("indeksi", ind1, ind2, ind3)
@@ -76,15 +75,10 @@ def nadji_optimalno(niz, dubina, s, k, opt):
         exit()
 
 
-
-
 def metod_unazad(k, s, vr):
 
-    print("metod k vr", k, vr)
     rez1 = np.array([])
     if k == 1:
-
-        print("kad k==1", s.koefs_problema[0], math.floor(vr/s.matricaA[0]))
         return s.koefs_problema[0] * math.floor(vr/s.matricaA[0])
 
     else:
@@ -97,13 +91,10 @@ def metod_unazad(k, s, vr):
         for i in s.x:
             if vr - s.matricaA[k-1]*i >= 0:
 
-                print("for s.b, s.matricaA[k-1], i", vr, s.matricaA[k - 1], i)
                 rez = np.append(rez, s.koefs_problema[k-1]*i + metod_unazad(k-1, s, vr - s.matricaA[k-1]*i))
-                print("IZLAZ NAKON I-TOG", k, i)
+                print("trenutni: dubina, cvor", k, i)
 
-        print("rez:", rez)
-        print("===================max od rez", max(rez))
-        print("indeks za x:::::::::::", np.where(rez == max(rez))[0])
+        print("rez:", rez, max(rez))
 
         if len(rez) < 4:
             l = 4 - len(rez)
@@ -127,24 +118,21 @@ def metod_i(k, vr, rez, s, levo):
 
     elif k > 1:
         if rez == levo:
-            print("USAOOO U REZ JEDN LEVO", s.i_y[k-1][int(vr)], k)
             s.i_y[k][int(vr)] = s.i_y[k-1][int(vr)]
         else:
             s.i_y[k][int(vr)] = k
+
+    print(s.i_y)
 
 
 def metod_unapred(k, s, vr):
 
     for i in range(k):
-        print(i)
         for j in range(int(s.b)+1):
             if i == 0:
                 continue
             elif i == 1:
-                print("...", s.koefs_problema[i-1], math.floor(j/s.matricaA[i-1]))
                 s.k_y[i][j] = s.koefs_problema[i-1] * math.floor(j/s.matricaA[i-1])
-
-                print("metod i", i, j, s.k_y[i][j])
                 metod_i(i, j, s.k_y[i][j], s, 0)
 
             else:
