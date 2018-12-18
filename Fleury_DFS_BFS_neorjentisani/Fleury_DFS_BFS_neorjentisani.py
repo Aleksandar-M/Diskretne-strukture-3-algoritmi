@@ -1,6 +1,6 @@
-import numpy as np
 from collections import defaultdict
 import sys
+
 
 class Graf:
 
@@ -12,6 +12,12 @@ class Graf:
         self.graf[u].append(v)
         self.graf[v].append(u)
 
+    # Pretraga grafa u dubinu
+    def DFS_neorj(self, c):
+
+        posecen = [False] * len(self.graf)
+        self.DFS_pom(c, posecen)
+
     def DFS_pom(self, c, posecen):
 
         posecen[c] = True
@@ -21,11 +27,7 @@ class Graf:
             if not posecen[i]:
                 self.DFS_pom(i, posecen)
 
-    def DFS_neorj(self, c):
-
-        posecen = [False] * len(self.graf)
-        self.DFS_pom(c, posecen)
-
+    # Pretraga grafa u sirinu
     def BFS_neorj(self, c):
 
         Q = []
@@ -63,6 +65,7 @@ class Graf:
             else:
                 Q.pop(0)
 
+    # Pomocna f-ja za brojanje cvorova do kojih se moze dodji od c
     def prebroj(self, c, posecen):
 
         posecen[c] = True
@@ -84,6 +87,7 @@ class Graf:
             if vr == u:
                 self.graf[v].pop(ind)
 
+    # Grana je validna ako nakon njenog brisanja broj dostizucih cvorova od u je isti (tj. grana nije most)
     def validna_grana(self, u, v):
 
         if len(self.graf[u]) == 1:
@@ -105,6 +109,7 @@ class Graf:
             else:
                 return True
 
+    # F-ja za ispis Ojlerovog puta/cikla
     def ispisi_od_u(self, u):
 
         for v in self.graf[u]:
@@ -113,8 +118,10 @@ class Graf:
                 self.obrisi_granu(u, v)
                 self.ispisi_od_u(v)
 
+    # Fleury-ev algoritam
     def ispisi_ojlerov_put(self):
 
+        # Ne postoji Ojlerov put/cikl ako je broj neparnih cvorova razlicit od 0 ili 2
         br_neparnih = 0
         for c in range(int(self.V)):
             if len(self.graf[c]) % 2 != 0:
@@ -124,6 +131,7 @@ class Graf:
             print("Ne postoji Ojlerov put/cikl, broj neparnih cvorova:", br_neparnih)
             exit()
 
+        # Trazimo cikl/put od prvog neparnog cvora, ako su svi parnog stepena krecemo od prvog cvora
         u = 0
         for i in range(int(self.V)):
             if len(self.graf[i]) % 2 != 0:
