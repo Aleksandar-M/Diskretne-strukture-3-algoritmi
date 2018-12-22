@@ -70,6 +70,63 @@ class Graf:
                 print("Grane koje grade razapinjucu sumu:\n", direkt)
                 return direkt
 
+    def BFS_orj(self, c):
+
+        Q = []
+        posecen = [0] * len(self.graf)
+        p = ['-'] * len(self.graf)
+        l = ['-'] * len(self.graf)
+        t = ['-'] * len(self.graf)
+
+        Q.append(c)
+        posecen[c] = 1
+        l[c] = 0
+        t[c] = 1
+        ispis(Q, posecen, p, l, t)
+
+        while Q:
+
+            c = Q[0]
+
+            for i in self.graf[c]:
+                if posecen[i] == 0:
+                    Q.append(i)
+                    posecen[i] = 1
+                    p[i] = c
+                    l[i] = l[c] + 1
+                    t[i] = sum(posecen)
+
+                    ispis(Q, posecen, p, l, t)
+
+            if sum(posecen) == len(self.graf):
+
+                while Q:
+                    ispis(Q, posecen, p, l, t)
+                    Q.pop(0)
+            else:
+                Q.pop(0)
+
+
+def ispis(Q, posecen, p, l, t):
+
+    sp = " "
+    br1 = 0
+    br2 = 0
+
+    for i in p:
+        if i != '-':
+            br1 += 1
+
+    for i in l:
+        if i != '-':
+            br2 += 1
+
+    if len(p) < 10:
+        print(Q, sp*3*(len(posecen)-len(Q)), posecen, sp, p, br1*2*sp, l, br1*2*sp, t)
+    else:
+        print(Q, "\n", posecen, "\n", p, "\n", l, "\n", t)
+        print("----------")
+
 
 def unesi_graf():
 
@@ -91,6 +148,8 @@ def main():
     print(g.graf)
     print("############# DFS #############")
     g.DFS_orj(start)
+    print("############# BFS #############")
+    g.BFS_orj(start)
 
 
 if __name__ == '__main__':
