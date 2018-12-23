@@ -1,8 +1,10 @@
+from builtins import print
+
 import numpy as np
 import copy
 import math
 
-np.set_printoptions(suppress=True, precision=3)
+#np.set_printoptions(suppress=False, precision=3)
 
 
 class Sistem:
@@ -10,7 +12,7 @@ class Sistem:
     def __init__(self):
         self.br_vrsta = 0
         self.br_kolona = 0
-        self.rez_funkcije = 0  # rezultat funkcije!
+        self.rez_funkcije = np.array([0])  # rezultat funkcije!
         self.problem = ""
         self.koefs_problema = np.array([])
         self.niz_znakova = np.array([])
@@ -20,6 +22,7 @@ class Sistem:
         self.Q = np.array([])
         self.x = np.array([])
 
+        self.baz_prom = 0
 
 blend = "da"
 
@@ -41,6 +44,8 @@ def unesiUlaz(s):
 
     s.br_vrsta = int(ulaz.split(" ")[0])
     s.br_kolona = int(ulaz.split(" ")[1])
+
+    s.baz_prom = int(ulaz.split(" ")[1])
 
     s.matricaA = np.zeros((s.br_vrsta, s.br_kolona))
     s.matricaB = np.zeros((s.br_vrsta, 1))
@@ -122,11 +127,11 @@ def ispis(s2):
 
     for i in range(len(mat)):
         for j in range(len(mat[0])):
-            print('{: 3.2f}'.format(mat[i][j]), end=" ")
-        print('{: 3.2f}'.format(mat2[i][0]))
+            print('{: f}'.format(mat[i][j]), end=" ")
+        print('{: f}'.format(mat2[i][0]))
 
     for i in range(len(s2.koefs_problema)):
-        print('{: 3.2f}'.format(s2.koefs_problema[i]), end=" ")
+        print('{: 3f}'.format(s2.koefs_problema[i]), end=" ")
     print(s2.rez_funkcije)
 
     print("-----------------")
@@ -149,19 +154,15 @@ def elem_transformacije(s2, pivot_vrsta, pivot_kolona, pivot_vrednost):
         s2.rez_funkcije = s2.rez_funkcije + (-1) * stara_pivot_kolona_c / pivot_vrednost * s2.matricaB[
             pivot_vrsta]
 
-        # Zaokruzivanje mnogo malih brojva blizu nule na 0
-        s2.matricaA[abs(s2.matricaA) < 0.00001] = 0
-        s2.matricaB[abs(s2.matricaB) < 0.00001] = 0
-        s2.koefs_problema[abs(s2.koefs_problema) < 0.00001] = 0
-        s2.rez_funkcije[abs(s2.rez_funkcije) < 0.00001] = 0
+        # Ako je decimalni deo manji od 0.01 zaokruzujemo na ceo broj
+        zaokruzi(s2)
 
     # Delimo celu vrstu sa trenutnim pivotom
     if pivot_vrednost != 0:
         s2.matricaA[pivot_vrsta] = s2.matricaA[pivot_vrsta] / pivot_vrednost
         s2.matricaB[pivot_vrsta] = s2.matricaB[pivot_vrsta] / pivot_vrednost
 
-        s2.matricaA[abs(s2.matricaA) < 0.00001] = 0
-        s2.matricaB[abs(s2.matricaB) < 0.00001] = 0
+        zaokruzi(s2)
 
 
 # Pomocna funkcija za transformisanje koeficijenata ispod bazisnih kolona
@@ -176,8 +177,8 @@ def ciscenje_koefs_problema(s3):
             stari_koef = s3.koefs_problema[i]
             if stari_koef != 0:
                 indeks_1 = jedinice[0]
-                print(s3.matricaA)
-                print(s3.koefs_problema, stari_koef, s3.matricaA[indeks_1, :])
+                #print(s3.matricaA)
+                #print(s3.koefs_problema, stari_koef, s3.matricaA[indeks_1, :])
                 s3.koefs_problema = s3.koefs_problema + (-1) * stari_koef * s3.matricaA[indeks_1, :]
                 s3.rez_funkcije = s3.rez_funkcije + (-1) * stari_koef * s3.matricaB[indeks_1, :]
 
@@ -208,9 +209,9 @@ def tablicni_simpleks(s):
 
                 # Trazimo pivot
                 min = 100
-                pivot_vrsta = 50
-                pivot_kolona = 50
-                pivot_vrednost = 50
+                pivot_vrsta = 30
+                pivot_kolona = 30
+                pivot_vrednost = 30
                 for i in range(s.br_vrsta):
                     if s.matricaA[i][k] > 0:
                         nova_vr = s.matricaB[i][0] / s.matricaA[i][k]
@@ -255,6 +256,10 @@ def tablicni_simpleks(s):
 
             print("\nKorisceno Blendovo pravilo:", blend)
 
+            if np.size(np.where(opt_resenje[:s.baz_prom] < 0)[0]) > 0:
+                print("Nema dopustivih tacaka", opt_resenje[:s.baz_prom])
+                exit()
+
             if s.problem == "min":
                 print("min f:", s.rez_funkcije[0] * (-1))
             else:
@@ -292,9 +297,9 @@ def dualni_simpleks(s):
 
                 # Trazimo pivot
                 max = -100
-                pivot_vrsta = 50
-                pivot_kolona = 50
-                pivot_vrednost = 50
+                pivot_vrsta = 30
+                pivot_kolona = 30
+                pivot_vrednost = 30
 
                 for i in range(s.br_kolona):
                     if s.matricaA[k][i] < 0:
@@ -333,10 +338,15 @@ def dualni_simpleks(s):
                     s.rez_funkcije = s.rez_funkcije + (-1) * stara_pivot_kolona_c / pivot_vrednost * s.matricaB[
                         pivot_vrsta]
 
+                    # Zaokruzujemo sve vrednosti na dve decimale
+                    zaokruzi(s)
+
                 # Delimo celu vrstu sa trenutnim pivotom
                 if pivot_vrednost != 0:
                     s.matricaA[pivot_vrsta] = s.matricaA[pivot_vrsta] / pivot_vrednost
                     s.matricaB[pivot_vrsta] = s.matricaB[pivot_vrsta] / pivot_vrednost
+
+                    zaokruzi(s)
 
                 break
 
@@ -364,17 +374,21 @@ def dualni_simpleks(s):
 
             print("\nKorisceno Blendovo pravilo:", blend)
 
+            # Ako je neko od resenja negativno
+            if np.size(np.where(opt_resenje[:s.baz_prom] < 0)[0]) > 0:
+                print("Nema dopustivih tacaka", opt_resenje[:s.baz_prom])
+                exit()
+
             if s.problem == "min":
-                print("min f:", s.rez_funkcije[0] * (-1))
+                print("min f:", np.round(s.rez_funkcije[0], 5) * (-1))
             else:
-                print("max f:", s.rez_funkcije[0])
+                print("max f:", np.round(s.rez_funkcije[0], 5))
 
             print("Optimalno resenje:\n", end="")
             for i in range(len(opt_resenje)):
                 print('{: 3.2f}'.format(opt_resenje[i]), end=" ")
             print("")
-            exit()
-            #return
+            return
 
         iteracija += 1
 
@@ -389,16 +403,35 @@ def negativni_c(s):
 
     return False
 
+
 # Pomocna fja za proveru postojanja negativnih b-ova
 def negativni_b(s):
 
     b_ovi = s.matricaB
-    print(b_ovi)
     for b in b_ovi:
         if b[0] < 0:
             return True
 
     return False
+
+
+# Ako je decimalni deo manji od 0.01 zaokruzujemo na ceo broj
+def zaokruzi(s):
+
+    z = 10
+    for i, lin in enumerate(s.matricaA):
+        for j, vr in enumerate(lin):
+            s.matricaA[i][j] = round(vr, z) + 0
+
+    for i, vr in enumerate(s.matricaB):
+        s.matricaB[i][0] = round(vr[0], z) + 0
+
+    for i, vr in enumerate(s.koefs_problema):
+        s.koefs_problema[i] = round(vr, z) + 0
+
+    s.rez_funkcije = np.round(s.rez_funkcije, z) + 0
+    return s
+
 
 # Pomocna fja za proveru postojanja pocetne baze
 def postoji_baza(s):
@@ -406,30 +439,76 @@ def postoji_baza(s):
     bazisne_kol = 0
 
     for i, vr in enumerate(s.matricaA.T):
-        jedinice = np.where(s.matricaA[:, i] == 1)[0]
-        nule = np.where(s.matricaA[:, i] == 0)[0]
+        jedinice = np.where(vr == 1)[0]
+        nule = np.where(vr == 0)[0]
         if len(jedinice) == 1 and len(nule) == s.br_vrsta - 1 and s.koefs_problema[i] == 0:
             bazisne_kol += 1
 
     if bazisne_kol == s.br_vrsta:
-        print("Jednak br baz kol i kolona, ima bazu")
         return True
     else:
-        print("Nema pocetnu bazu")
         return False
 
-    # TODO: Ako ima bazisne kolone ali u c nisu nule...Vrsimo elementarne transformacije kako bi dobili bazisne kolone
-    #ciscenje_koefs_problema(s)
+
+# Funkcija za proveru celobrojnosti resenja x1,x2...
+def bazisne_celobrojne(s3):
+
+    sve_jed = np.zeros(s3.baz_prom)
+    for t in range(s3.baz_prom):
+
+        jedinice = np.where(s3.matricaA[:, t] == 1)[0]
+        nule = np.where(s3.matricaA[:, t] == 0)[0]
+        if len(jedinice) == 1 and len(nule) == s3.br_vrsta - 1:
+            sve_jed[t] = jedinice
+
+    for i in sve_jed:
+        if np.round(s3.matricaB[int(i)], 5) % 1 != 0:
+            return False
+
+    return True
 
 
 def gomorijev_rez(s3):
 
-    ostaci = np.zeros(len(s3.koefs_problema))
-    for i, vr in enumerate(s3.koefs_problema):
-        ostaci[i] = vr - math.floor(vr)
+    ostaci = np.zeros(s3.br_kolona)
+    ostatak_rez = 0
 
-    ostatak_rez = s3.rez_funkcije - math.floor(s3.rez_funkcije)
-    #print(ostaci, ostatak_rez)
+    #Ako rezultat fje nije ceo broj racunamo decimalne delove
+    if np.round(s3.rez_funkcije, 10) % 1 != 0:
+        for i, vr in enumerate(s3.koefs_problema):
+            ostaci[i] = vr - math.floor(vr)
+        ostatak_rez = s3.rez_funkcije - math.floor(s3.rez_funkcije)
+
+    # Ako postoje x-evi koji nisu celobrojni,
+    # uzimamo prvu j-nu od tih ciji rezultat ima decimalni deo != 0 pa po toj vrsti pravimo rez
+    else:
+
+        sve_jed = np.zeros(s3.baz_prom)
+        razlomljeni = np.zeros(s3.baz_prom)
+        for t in range(s3.baz_prom):
+
+            jedinice = np.where(s3.matricaA[:, t] == 1)[0]
+            nule = np.where(s3.matricaA[:, t] == 0)[0]
+            if len(jedinice) == 1 and len(nule) == s3.br_vrsta - 1:
+                razlomljeni[t] = s3.matricaB[jedinice[0]]
+                sve_jed[t] = jedinice
+
+        novi_ostaci = [r - math.floor(r) for r in razlomljeni]
+
+        maks_ostatak = -1
+        for i in novi_ostaci:
+            if i != 0:
+                maks_ostatak = i
+                break
+
+        indeks = np.where(novi_ostaci == maks_ostatak)[0]
+        indeks_maksa = int(sve_jed[indeks][0])
+
+        for j, vr2 in enumerate(s3.matricaA[indeks_maksa]):
+            ostaci[j] = vr2 - math.floor(vr2)
+
+        ostatak_rez = np.array([maks_ostatak])
+
     ostaci = np.append(ostaci, -1)
     for i, vr in enumerate(ostaci):
         if vr != 0:
@@ -437,8 +516,8 @@ def gomorijev_rez(s3):
 
     if ostatak_rez != 0:
         ostatak_rez *= -1
-    #print(ostaci, ostatak_rez)
 
+    # Dodajemo novu jednacinu u trenutnu simpleks tablicu
     s3.matricaA = np.append(s3.matricaA, np.zeros((s3.br_vrsta, 1)), axis=1)
     s3.matricaA = np.append(s3.matricaA, [ostaci], axis=0)
     s3.matricaB = np.append(s3.matricaB, [ostatak_rez], axis=0)
@@ -446,7 +525,119 @@ def gomorijev_rez(s3):
     s3.br_vrsta += 1
     s3.br_kolona += 1
 
+    # Ako je decimalni deo manji od 0.01 zaokruzujemo na ceo broj
+    zaokruzi(s3)
+
     return s3
+
+
+def dvofazni_simpleks(s, jedn_ili_vece):
+
+    print("\n######################Prva faza:######################\n")
+    s2 = Sistem()
+    s2 = copy.deepcopy(s)
+    s2.koefs_problema = np.zeros((len(s.koefs_problema)))
+
+    print(s2.rez_funkcije)
+    s2.rez_funkcije[0] = 0
+
+    # Ako je neko b < 0 mnozimo celu vrstu sa -1
+    for p, l in enumerate(s2.matricaB):
+        if l[0] < 0:
+            s2.matricaA[p][s2.matricaA[p] != 0] *= -1
+            s2.matricaB[p][0] *= -1
+
+    for i in range(len(jedn_ili_vece)):
+        if jedn_ili_vece[i] == ">=" or jedn_ili_vece[i] == "=":
+            dodatni = np.zeros((s.br_vrsta, 1))
+            dodatni[i] = 1
+            s2.matricaA = np.append(s2.matricaA, dodatni, axis=1)
+            s2.br_kolona += 1
+            s2.koefs_problema = np.append(s2.koefs_problema, 1)
+            s2.P = np.append(s2.P, s2.br_kolona - 1)
+
+    s2.P = np.array(list(map(int, s2.P)))
+
+    vestacke = np.where(s2.koefs_problema == 1)[0]
+
+    ispis(s2)
+
+    # Vrsimo elementarne transformacije kako bi dobili bazisne kolone
+    ciscenje_koefs_problema(s2)
+
+    ispis(s2)
+    print("Trenutna vrednost funkcije:", s2.rez_funkcije[0])
+
+    print("Pozivamo tablicni simplex u prvoj fazi:")
+    tablicni_simpleks(s2)
+
+    if s2.rez_funkcije[0] != 0:
+        print("\n Rezultat pomocnog problema:", s2.rez_funkcije[0],
+              "!= 0 => pocetni problem nema dopustivih resenja. STOP")
+        s2.rez_funkcije[0] = float('-inf')
+        return
+        #exit()
+
+    # Brisanje vestackih promenljivih
+    pom = np.array([])
+    for i in vestacke:
+        if (len(np.where(s2.matricaA[:, i] == 1)[0]) != 1 or \
+                len(np.where(s2.matricaA[:, i] == 0)[0]) != s2.br_vrsta - 1) or s2.koefs_problema[i] != 0:
+            s2.matricaA[:, i] = np.zeros(s2.br_vrsta)
+            s2.koefs_problema[i] = 0
+            pom = np.append(pom, i)
+            vestacke = np.delete(vestacke, np.where(vestacke == i))
+
+    # Prolazimo preostale vestacke bazisne kolone i brisemo odgovarajucu vrstu ako su sve nule u vrsti ili
+    # nalazimo pivot i obavljamo transformacije
+    for i in vestacke:
+
+        jedinice = np.where(s2.matricaA[:, i] == 1)[0]
+        nule = np.where(s2.matricaA[:, i] == 0)[0]
+
+        if len(jedinice) == 1 and len(nule) == s2.br_vrsta - 1:
+
+            indeks_vr = jedinice[0]
+            ne_nule = np.where(s2.matricaA[indeks_vr, :] != 0)[0]
+
+            # Ako su sve nule u vrsti osim jedinice koja pripada bazisnoj koloni -> brisemo vrstu
+            if len(ne_nule) == 1 and ne_nule[0] == i:
+
+                s2.matricaA = np.delete(s2.matricaA, indeks_vr, axis=0)
+                s2.br_vrsta -= 1
+
+            # Nasli smo ne nula vrednost u vrsti, uzimamo za pivot i obavljamo elem. transformacije
+            else:
+
+                # novi pivot je prvi != 0 u toj vrsti
+                if ne_nule[0] != i:  # da ne uzmemo bas tog jedinog keca
+
+                    pivot_vrsta = indeks_vr
+                    pivot_kolona = ne_nule[0]
+                    pivot_vrednost = s2.matricaA[pivot_vrsta][pivot_kolona]
+
+                    elem_transformacije(s2, pivot_vrsta, pivot_kolona, pivot_vrednost)
+
+    # Brisemo sve vestacke kolone
+    pom = np.append(pom, vestacke)
+    s2.matricaA = np.delete(s2.matricaA, pom, axis=1)
+    s2.koefs_problema = np.delete(s2.koefs_problema, pom, axis=0)
+    s2.br_kolona -= len(pom)
+
+    print("\n######################Druga faza:######################\n")
+
+    s3 = copy.deepcopy(s2)
+    s3.koefs_problema = s.koefs_problema
+    s3.br_kolona = len(s3.matricaA[0])
+    s3.br_vrsta = len(s3.matricaA)
+
+    s3.rez_funkcije[0] = s.rez_funkcije[0]
+
+    ciscenje_koefs_problema(s3)
+
+    tablicni_simpleks(s3)
+    s = copy.deepcopy(s3)
+    return s
 
 
 def main():
@@ -476,10 +667,7 @@ def main():
           s.niz_znakova)
     ispis(s)
 
-    #######################################
-
-    ispis(s)
-    # Pozivamo odgovarajuci simpleks
+    # Pozivamo odgovarajuci Simpleks
     if negativni_c(s) and postoji_baza(s):
 
         print("C ima negativnih pozivamo tablicni simpleks\n")
@@ -491,121 +679,21 @@ def main():
         dualni_simpleks(s)
 
     else:   # nema pocetne baze
-        # pozovi tablicni ili dvofazni simpleks
-        print("dvofazni ili tablicni treba da se zove")
-        tablicni_simpleks(s)
 
+        print("Nemamo pocetnu bazu pozivamo dvofazni simpleks\n")
+        s = dvofazni_simpleks(s, jedn_ili_vece)
 
-    exit()
-    #######################################
-    sl_dvofaznog = 1  #######
-    if sl_dvofaznog:
+    baz_cel = bazisne_celobrojne(s)
+    iteracija = 1
 
-        print("\n######################Prva faza:######################\n")
-        s2 = Sistem()
-        s2 = copy.deepcopy(s)
-        s2.koefs_problema = np.zeros((len(s.koefs_problema)))
+    while not baz_cel:
 
-        for i in range(len(jedn_ili_vece)):
-            if jedn_ili_vece[i] == ">=" or jedn_ili_vece[i] == "=":
-                dodatni = np.zeros((s.br_vrsta, 1))
-                dodatni[i] = 1
-                s2.matricaA = np.append(s2.matricaA, dodatni, axis=1)
-                s2.br_kolona += 1
-                s2.koefs_problema = np.append(s2.koefs_problema, 1)
-                s2.P = np.append(s2.P, s2.br_kolona - 1)
-
-        s2.P = np.array(list(map(int, s2.P)))
-
-        for i, vr in enumerate(s2.matricaA.T):
-            jedinice = np.where(s2.matricaA[:, i] == 1)[0]
-            nule = np.where(s2.matricaA[:, i] == 0)[0]
-            if len(jedinice) == 1 and len(nule) == s2.br_vrsta - 1:
-                s2.koefs_problema[i] = 1
-
-        vestacke = np.where(s2.koefs_problema == 1)[0]
-        ispis(s2)
-        # Vrsimo elementarne transformacije kako bi dobili bazisne kolone
-        ciscenje_koefs_problema(s2)
-
-        ispis(s2)
-        print("Trenutna vrednost funkcije:", s2.rez_funkcije[0])
-
-        print("Pozivamo tablicni simplex u prvoj fazi:")
-        tablicni_simpleks(s2)
-
-        if s2.rez_funkcije[0] != 0:
-            print("\n Rezultat pomocnog problema:", s2.rez_funkcije[0],
-                  "!= 0 => pocetni problem nema dopustivih resenja. STOP")
-            exit()
-
-        # Brisanje vestackih promenljivih
-        pom = np.array([])
-        for i in vestacke:
-            if len(np.where(s2.matricaA[:, i] == 1)[0]) != 1 or \
-                    len(np.where(s2.matricaA[:, i] == 0)[0]) != s2.br_vrsta - 1:
-                s2.matricaA[:, i] = np.zeros(s2.br_vrsta)
-                s2.koefs_problema[i] = 0
-                pom = np.append(pom, i)
-                vestacke = np.delete(vestacke, np.where(vestacke == i))
-
-        # Prolazimo preostale vestacke bazisne kolone i brisemo odgovarajucu vrstu ako su sve nule u vrsti ili
-        # nalazimo pivot i obavljamo transformacije
-        for i in vestacke:
-
-            jedinice = np.where(s2.matricaA[:, i] == 1)[0]
-            nule = np.where(s2.matricaA[:, i] == 0)[0]
-
-            if len(jedinice) == 1 and len(nule) == s2.br_vrsta - 1:
-
-                indeks_vr = jedinice[0]
-                ne_nule = np.where(s2.matricaA[indeks_vr, :] != 0)[0]
-
-                # Ako su sve nule u vrsti osim jedinice koja pripada bazisnoj koloni -> brisemo vrstu
-                if len(ne_nule) == 1 and ne_nule[0] == i:
-
-                    s2.matricaA = np.delete(s2.matricaA, indeks_vr, axis=0)
-                    s2.br_vrsta -= 1
-
-                # Nasli smo ne nula vrednost u vrsti, uzimamo za pivot i obavljamo elem. transformacije
-                else:
-
-                    # novi pivot je prvi != 0 u toj vrsti
-                    if ne_nule[0] != i:  # da ne uzmemo bas tog jedinog keca
-
-                        pivot_vrsta = indeks_vr
-                        pivot_kolona = ne_nule[0]
-                        pivot_vrednost = s2.matricaA[pivot_vrsta][pivot_kolona]
-
-                        elem_transformacije(s2, pivot_vrsta, pivot_kolona, pivot_vrednost)
-
-        # Brisemo sve vestacke kolone
-        pom = np.append(pom, vestacke)
-        s2.matricaA = np.delete(s2.matricaA, pom, axis=1)
-        s2.koefs_problema = np.delete(s2.koefs_problema, pom, axis=0)
-        s2.br_kolona -= len(pom)
-
-        print("\n######################Druga faza:######################\n")
-
-        s3 = copy.deepcopy(s2)
-        s3.br_kolona = len(s3.matricaA[0])
-        s3.koefs_problema = s.koefs_problema[0:s3.br_kolona]
-        s3.br_vrsta = len(s3.matricaA)
-
-        ispis(s3)
-        ciscenje_koefs_problema(s3)
-        tablicni_simpleks(s3)
-
-    else:
+        gomorijev_rez(s)
+        print("Gomorijev rez:", iteracija)
+        ispis(s)
         dualni_simpleks(s)
-
-    ispis(s3)
-    exit()
-    while 1:
-        gomorijev_rez(s3)
-        ispis(s3)
-        dualni_simpleks(s3)
-
+        baz_cel = bazisne_celobrojne(s)
+        iteracija += 1
 
 
 if __name__ == '__main__':
